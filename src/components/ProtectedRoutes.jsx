@@ -1,20 +1,19 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
-import React from 'react'
+import React, { useContext, useState } from 'react';
+import UserContext from '../context/UserContext';
 
-const ProtectedRoutes = ( {isAllowed, rol, redirectTo = '/login', children} ) => {
-    //OBTENER EL USUARIO
+const ProtectedRoutes = ({ children, allowedRoles = [], redirectTo = '/login' }) => {
 
-    if(isAllowed)
-    {
-        return children ? children : <Outlet/>
+    //GET USER
+    const { currentUser } = useContext(UserContext);
+
+    const isAllowed = allowedRoles.includes(currentUser.role);
+
+    if (isAllowed) {
+        return children ? children : <Outlet />;
+    } else {
+        return <Navigate to={redirectTo} replace />;
     }
-    else
-    {
-        return <Navigate to="/login" replace />;
-    }
-
-    return children ? children : <Outlet />;
 }
 
 export default ProtectedRoutes;
