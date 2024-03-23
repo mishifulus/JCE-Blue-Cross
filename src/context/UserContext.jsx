@@ -7,6 +7,7 @@ const UserProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [users, setUsers] = useState(null);
     const [user, setUser] = useState(null);
+    const [loginAttempts, setLoginAttempts] = useState(0);
 
     const login = async ( username, password ) => {
 
@@ -29,7 +30,10 @@ const UserProvider = ({ children }) => {
                 const userData = await response.text();
                 console.log(userData);
                 setCurrentUser(JSON.parse(userData));
+                setLoginAttempts(0);
                 return 1;
+
+                // If user status is 1 -> Change password
             }
             else
             {
@@ -41,6 +45,12 @@ const UserProvider = ({ children }) => {
                     case 'Incorrect username':
                       return 3;
                     case 'Incorrect password':
+                        setLoginAttempts(prevAttempts => prevAttempts + 1);
+                        if (loginAttempts + 1 >= 3)
+                        {
+                            blockUser(username);
+                            return 6;
+                        }
                       return 4;
                     case 'User expired':
                       return 5;
@@ -63,29 +73,162 @@ const UserProvider = ({ children }) => {
         setCurrentUser(null);
     }
 
+    const blockUser = async (username) =>
+    {
+        try
+        {
+            const response = await fetch (`https://localhost:44304/block/${username}`, {
+                method: 'PUT'
+            });
+            if (!response.ok)
+            {
+                return false;
+            }
+            else
+            {
+                console.log(`User ${username} blocked.`);
+                return true;
+            }
+        }
+        catch (error)
+        {
+            console.error('Error:', error);
+            return false;
+        }
+    }
+
+
     //CRUD
-    const getUsers = () => {
+    const getUsers = async () =>
+    {
+        try
+        {
+            const response = await fetch ('https://localhost:44304/api/User');
+            if (response.ok)
+            {
+                const usersResponse = await response.text();
+                console.log(usersResponse);
+                setUsers(JSON.parse(usesrResponse));
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch (error)
+        {
+            console.error('Error:', error);
+            return false;
+        }
+    }
+
+    const getUser = async (userId) =>
+    {
+        try
+        {
+            const response = await fetch(`https://localhost:44304/api/User/${userId}`);
+            if (response.ok)
+            {
+                const userResponse = await response.text();
+                console.log(userResponse);
+                setUser(JSON.parse(userResponse));
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch (error)
+        {
+            console.error('Error:', error);
+            return false;
+        }
+    }
+
+    const putUser = async(userId, userData) =>
+    {
+        try
+        {
+            const response = await fetch(`https://localhost:44304/api/User/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+            if (!response.ok)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        catch (error)
+        {
+            console.error('Error:', error);
+            return false;
+        }
 
     }
 
-    const getUser = () => {
+    const postUser = async (userData) =>
+    {
+        try
+        {
+            const response = await fetch('https://localhost:44304/api/User', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+            if (!response.ok)
+            {
+                return false;
+            }
+            else
+            {
+                const userResponse = await response.text();
+                console.log(userResponse);
+                setUser(JSON.parse(userResponse));
+                return true;
+            }
+        }
+        catch (error)
+        {
+            console.error('Error:', error);
+            return false;
+        }
 
     }
 
-    const putUser = () => {
+    const deleteUser = async (userId) =>
+    {
+        try
+        {
+            const response = await fetch(`https://localhost:44304/api/User/${userId}`, {method: 'DELETE'});
+            if (!response.ok)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        catch (error)
+        {
+            console.log('Error:', error);
+            return false;
+        }
+    };
 
-    }
 
-    const postUser = () => {
-
-    }
-
-    const deleteUser = () => {
-
-    }
-
-
-    const data = { currentUser, login, logout };
+    const data = { currentUser, login, logout, deleteUser, postUser, putUser, getUser, getUsers, user, users };
 
     return(
         <UserContext.Provider value = {data}>
