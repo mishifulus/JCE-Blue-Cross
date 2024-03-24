@@ -1,0 +1,42 @@
+.header {
+    margin-top: 15%;
+}
+
+.btnheader {
+    margin-top: 15%;
+    padding-left: 60%;
+}
+
+.btn-search {
+    color: #fff;
+    background-color: #0890DC;
+}
+
+.btn-search:hover {
+    background-color: white;
+    color: #0890DC !important;
+    font-weight: bold;
+}
+
+.tableModule {
+    margin-bottom: 7% !important;
+    margin: 0 auto;
+}
+
+.tdhead {
+    background-color: #0890DC !important;
+    color: #fff !important;
+}
+
+.tdbuttons {
+    background-color: #fff !important;
+    color: #fff !important;
+}
+
+td {
+    background-color: #DAF1FE !important;
+}
+
+.container {
+    margin-bottom: 1% !important;
+}

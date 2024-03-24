@@ -5,9 +5,17 @@ const UserContext = createContext();
 const UserProvider = ({ children }) => {
 
     const [currentUser, setCurrentUser] = useState(null);
-    const [users, setUsers] = useState(null);
+    const [users, setUsers] = useState([]);
     const [user, setUser] = useState(null);
     const [loginAttempts, setLoginAttempts] = useState(0);
+    const [lastFetchTime, setLastFetchTime] = useState(null);
+
+    useEffect(() => {
+        if (!users.length || !lastFetchTime || Date.now() - lastFetchTime > 60000)
+        {
+            getUsers();
+        }
+    }, []);
 
     const login = async ( username, password ) => {
 
@@ -108,12 +116,12 @@ const UserProvider = ({ children }) => {
             {
                 const usersResponse = await response.text();
                 console.log(usersResponse);
-                setUsers(JSON.parse(usesrResponse));
-                return true;
+                setUsers(JSON.parse(usersResponse));
+                setLastFetchTime(Date.now());
             }
             else
             {
-                return false;
+                console.error('Error al obtener los usuarios',);
             }
         }
         catch (error)

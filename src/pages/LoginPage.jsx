@@ -1,4 +1,4 @@
-import React, { useState, useContext }from 'react'
+import React, { useState, useContext } from 'react'
 import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import logo from "../assets/logo.png"
@@ -89,7 +89,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className='container-fluid'>
+    <div className='container-fluid container'>
         <div className="card">
           <div>
             <img src={logo} alt='Logo' height={'90px'}/>
