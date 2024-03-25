@@ -5,8 +5,7 @@
     border-width: 2px;
     display: flex;
     left: auto;
-    top: 200px;
-    margin-top: auto;
+    margin-top:10%;
 }
 
 .form-row {

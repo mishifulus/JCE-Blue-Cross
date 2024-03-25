@@ -6,12 +6,12 @@ import UserContext from '../context/UserContext';
 
 const UsersPage = () => {
 
-  const { deleteUser, postUser, putUser, getUser, getUsers, user, users, currentUser } = useContext(UserContext);
+  const { deleteUser, postUser, putUser, getUsers, users } = useContext(UserContext);
   const [seeForm, setSeeForm] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const [usersInput, setUsersInput] = useState({
-    userId: "",
+    userId: 0,
     name: "",
     lastName: "",
     userAddress: "",
@@ -24,8 +24,8 @@ const UsersPage = () => {
     role: "",
     username: "",
     password: "",
-    expiredDate: "",
-    status: "",
+    expireDate: "",
+    status: 1,
   });
 
   const handleChange = (e) => {
@@ -37,7 +37,7 @@ const UsersPage = () => {
 
   const handleReset = () => {
     setUsersInput({
-      userId: "",
+      userId: 0,
       name: "",
       lastName: "",
       userAddress: "",
@@ -50,13 +50,66 @@ const UsersPage = () => {
       role: "",
       username: "",
       password: "",
-      expiredDate: "",
-      status: "",
+      expireDate: "",
+      status: 1,
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (usersInput.userId)
+    {
+      putUser(usersInput.userId, usersInput);
+      swal(
+        `User saved`,
+        "Update",
+        "success"
+      );
+      await getUsers();
+    }
+    else
+    {
+      usersInput.password = `${usersInput.username}JCE`;
+      postUser(usersInput);
+      swal(
+        `User saved`,
+        "Register",
+        "success"
+      );
+      await getUsers();
+    }
+    handleReset();
     setSeeForm(false);
+  }
+
+  const handleDelete = async (id) => {
+    var result = await deleteUser(id);
+
+    if (result)
+    {
+      swal(
+        `User deleted`,
+        "Delete",
+        "success"
+      );
+      await getUsers();
+    }
+    else
+    {
+      swal(
+        `Error`,
+        "Delete",
+        "success"
+      );
+    }
+  }
+
+  const handleEdit = (user) => {
+    setUsersInput({
+      ...user,
+      dob: user.dob ? formatDate(user.dob) : "",
+      expireDate: user.expireDate ? formatDate(user.expireDate) : ""
+    });
+    setSeeForm(true);
   }
 
   useEffect(() => {
@@ -67,7 +120,7 @@ const UsersPage = () => {
         const currentTime = new Date().getTime();
         if (!lastFetchTime || (currentTime - parseInt(lastFetchTime)) > 60000) {
           await getUsers();
-          localStorage.setItem('lastFetchTime', currentTime.toString()); // Actualizar el tiempo de la última actualización
+          localStorage.setItem('lastFetchTime', currentTime.toString());
         }
         
       }
@@ -114,160 +167,104 @@ const UsersPage = () => {
       </div>
 
       {seeForm ? (
-      <div>
-        <div className='d-flex col-md-6 offset-md-3 mb-1'>
-        <input type="text" id="inputId" name='userId' value={usersInput.userId} onChange={handleChange} className="ms-4 form-control" hidden={true} />
-          <div className='col-6 ms-2'>
-            <div className="row g-3 align-items-center">
-              <div className="col-auto">
-                <label className="col-form-label">Name</label>
+      <div className='container'>
+        <div className='row'>
+          <div className='col-md-6 offset-md-3'>
+            <form>
+              <input type="text" id="inputId" name='userId' value={usersInput.userId} onChange={handleChange} className="ms-4 form-control" hidden={true} readOnly disabled/>
+              <div className='mb-3 row'>
+                <label className="col-sm-2 col-form-label">Name</label>
+                <div className="col-sm-10">
+                  <input type="text" id="inputName" name='name' value={usersInput.name} onChange={handleChange} className="form-control" minLength={1} maxLength={30}/>
+                </div>
               </div>
-              <div className="col-auto">
-                <input type="text" id="inputName" name='name' value={usersInput.name} onChange={handleChange} className="ms-4 form-control" />
+              <div className='mb-3 row'>
+                <label className="col-sm-2 col-form-label">Last Name</label>
+                <div className="col-sm-10">
+                  <input type="text" id="inputLastName" name='lastName' value={usersInput.lastName} onChange={handleChange} className="form-control" minLength={1} maxLength={30} />
+                </div>
               </div>
-            </div>
-          </div>
-          <div className='col-6 ms-4'>
-            <div className="row g-3 align-items-center">
-              <div className="col-auto">
-                <label className="col-form-label me-1 ms-2">Last Name</label>
+              <div className='mb-3 row'>
+                <label className="col-sm-2 col-form-label">Address</label>
+                <div className="col-sm-10">
+                  <input type="text" id="inputAddress" name='userAddress' value={usersInput.userAddress} onChange={handleChange} className="form-control" minLength={1} maxLength={50} />
+                </div>
               </div>
-              <div className="col-auto">
-                <input type="text" id="inputLastName" name='lastName' value={usersInput.lastName} onChange={handleChange} className="form-control" />
+              <div className='mb-3 row'>
+                <label className="col-sm-2 col-form-label">Zip Code</label>
+                <div className="col-sm-10">
+                  <input type="text" id="inputZipCode" name='zipCode' value={usersInput.zipCode} onChange={handleChange} className="form-control" minLength={1} maxLength={5}/>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <div className='d-flex col-md-6 offset-md-3 mb-1'>
-          <div className='col-6 '>
-            <div className="row g-3 align-items-center">
-              <div className="col-auto">
-                <label className="col-form-label">Address</label>
+              <div className='mb-3 row'>
+                <label className="col-sm-2 col-form-label">State</label>
+                <div className="col-sm-10">
+                  <input type="text" id="inputState" name='state' value={usersInput.state} onChange={handleChange} className="form-control" minLength={1} maxLength={3}/>
+                </div>
               </div>
-              <div className="col-auto">
-                <input type="text" id="inputAddress" name='userAddress' value={usersInput.userAddress} onChange={handleChange} className="ms-4 form-control" />
+              <div className='mb-3 row'>
+                <label className="col-sm-2 col-form-label">City</label>
+                <div className="col-sm-10">
+                  <input type="text" id="inputCity" name='city' value={usersInput.city} onChange={handleChange} className="form-control" minLength={1} maxLength={30}/>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className='col-6 ms-5'>
-            <div className="row g-3 align-items-center">
-              <div className="col-auto">
-                <label className="col-form-label">Zip Code</label>
+              <div className='mb-3 row'>
+                <label className="col-sm-2 col-form-label">DOB</label>
+                <div className="col-sm-10">
+                  <input type="date" id="inputDob" name='dob' value={usersInput.dob} onChange={handleChange} className="form-control" />
+                </div>
               </div>
-              <div className="col-9">
-                <input type="text" id="inputZipCode" name='zipCode' value={usersInput.zipCode} onChange={handleChange} className="form-control" />
+              <div className='mb-3 row'>
+                <label className="col-sm-2 col-form-label">Sex</label>
+                <div className="col-sm-10">
+                  <select className="form-select" name="sex" value={usersInput.sex} onChange={handleChange}>
+                    <option value="0">Male</option>
+                    <option value="1">Female</option>
+                    <option value="2">Other</option>
+                  </select>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <div className='d-flex col-md-6 offset-md-3 mb-1'>
-          <div className='col-6'>
-            <div className="row g-3 align-items-center">
-              <div className="col-auto">
-                <label className="col-form-label">State</label>
+              <div className='mb-3 row'>
+                <label className="col-sm-2 col-form-label">Email</label>
+                <div className="col-sm-10">
+                  <input type="email" id="inputEmails" name='email' value={usersInput.email} onChange={handleChange} className="form-control" minLength={1} maxLength={100}/>
+                </div>
               </div>
-              <div className="col-auto">
-                <input type="text" id="inputState" name='state' value={usersInput.state} onChange={handleChange} className="ms-5 form-control" />
+              <div className='mb-3 row'>
+                <label className="col-sm-2 col-form-label">Role</label>
+                <div className="col-sm-10">
+                  <select className="form-select" name='role' value={usersInput.role} onChange={handleChange}>
+                    <option value="0">Administrator</option>
+                    <option value="1">Member</option>
+                    <option value="2">Provider</option>
+                    <option value="3">Payor</option>
+                  </select>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className='col-6 ms-5'>
-            <div className="row g-3 align-items-center">
-              <div className="col-auto">
-                <label className="col-form-label me-3">City</label>
+              <div className='mb-3 row'>
+                <label className="col-sm-2 col-form-label">Username</label>
+                <div className="col-sm-10">
+                  <input type="text" id="inputUsername" name='username' value={usersInput.username} onChange={handleChange} className="form-control" minLength={1} maxLength={30}/>
+                </div>
               </div>
-              <div className="col-auto">
-                <input type="text" id="inputCity" name='city' value={usersInput.city} onChange={handleChange} className="ms-4 form-control" />
+              <div className='mb-3 row'>
+                <label className="col-sm-2 col-form-label">Expired Date</label>
+                <div className="col-sm-10">
+                  <input type="date" id="inputExpired" name='expireDate' value={usersInput.expireDate} onChange={handleChange} className="form-control" />
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <div className='d-flex col-md-6 offset-md-3 mb-1'>
-          <div className='col-6'>
-            <div className="row g-3 align-items-center">
-              <div className="col-auto">
-                <label className="col-form-label">DOB</label>
+              <div className='mb-3 row'>
+                <label className="col-sm-2 col-form-label">Status</label>
+                <div className="col-sm-10">
+                {usersInput.status == 0 ? (
+                  <input type="text" id="inputStatus" name='status' value={usersInput.status} onChange={handleChange} className="form-control"/>
+                ):
+                <input type="text" id="inputStatus" name='status' value={usersInput.status} onChange={handleChange} className="form-control" readOnly disabled/>
+                }
+                </div>
               </div>
-              <div className="col-auto">
-                <input type="text" id="inputDob" name='dob' value={usersInput.dob} onChange={handleChange} className="ms-5 form-control" />
-              </div>
-            </div>
-          </div>
-          <div className='col-6 ms-5'>
-            <div className="row g-3 align-items-center">
-              <div className="col-auto">
-                <label className="col-form-label me-3">Sex</label>
-              </div>
-              <div className="col-auto">
-                <input type="text" id="inputSex" name='sex' value={usersInput.sex} onChange={handleChange} className="ms-4 form-control" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='d-flex col-md-6 offset-md-3 mb-1'>
-          <div className='col-6'>
-            <div className="row g-3 align-items-center">
-              <div className="col-auto">
-                <label className="col-form-label">Email</label>
-              </div>
-              <div className="col-auto">
-                <input type="email" id="inputEmails" name='email' value={usersInput.email} onChange={handleChange} className="ms-5 form-control" />
-              </div>
-            </div>
-          </div>
-          <div className='col-6 ms-5'>
-            <div className="row g-3 align-items-center">
-              <div className="col-auto">
-                <label className="col-form-label me-2">Role</label>
-              </div>
-              <div className="col-auto">
-                <input type="text" id="inputRole" name='role' value={usersInput.role} onChange={handleChange} className="ms-4 form-control" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='d-flex col-md-6 offset-md-3 mb-1'>
-          <div className='col-6'>
-            <div className="row g-3 align-items-center">
-              <div className="col-auto">
-                <label className="col-form-label">Username</label>
-              </div>
-              <div className="col-auto">
-                <input type="text" id="inputUsername" name='username' value={usersInput.username} onChange={handleChange} className="ms-3 form-control" />
-              </div>
-            </div>
-          </div>
-          <div className='col-6 ms-5'>
-            <div className="row g-3 align-items-center">
-              <div className="col-auto">
-                <label className="col-form-label">Password</label>
-              </div>
-              <div className="col-auto">
-                <input type="text" id="inputPassword" name='password' value={usersInput.password} onChange={handleChange} className="form-control" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='d-flex col-md-6 offset-md-3 mb-4'>
-          <div className='col-6'>
-            <div className="row g-3 align-items-center">
-              <div className="col-auto">
-                <label className="col-form-label">Expired Date</label>
-              </div>
-              <div className="col-auto">
-                <input type="text" id="inputExpired" name='expiredDate' value={usersInput.expiredDate} onChange={handleChange} className="form-control" />
-              </div>
-            </div>
-          </div>
-          <div className='col-6 ms-5'>
-            <div className="row g-3 align-items-center">
-              <div className="col-auto">
-                <label className="col-form-label">Status</label>
-              </div>
-              <div className="col-auto">
-                <input type="text" id="inputStatus" name='status' value={usersInput.status} onChange={handleChange} className="ms-4 form-control" />
-              </div>
-            </div>
+
+            </form>
           </div>
         </div>
         <div className='d-flex col-md-6 offset-md-6 mb-4'>
@@ -324,8 +321,8 @@ const UsersPage = () => {
               <td>{user.role}</td>
               <td>{user.status}</td>
               <td className='p-1 ps-0 pe-0 tdbuttons'>
-                <button className='btn btn-primary m-1 pt-0 p-1'><FaEdit/></button>
-                <button className='btn btn-danger ms-0 m-1 pt-0 p-1'><FaTrash/></button>
+                <button className='btn btn-primary m-1 pt-0 p-1' onClick={() => handleEdit(user)}><FaEdit/></button>
+                <button className='btn btn-danger ms-0 m-1 pt-0 p-1' onClick={() => handleDelete(user.userId)}><FaTrash/></button>
               </td>
             </tr>
           ))}
