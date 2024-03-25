@@ -139,6 +139,7 @@ const UsersPage = () => {
   const seeForms = () => 
   {
     setSeeForm(true);
+    handleReset();
   }
 
   const seeFormf = () => 
@@ -257,9 +258,16 @@ const UsersPage = () => {
                 <label className="col-sm-2 col-form-label">Status</label>
                 <div className="col-sm-10">
                 {usersInput.status == 0 ? (
-                  <input type="text" id="inputStatus" name='status' value={usersInput.status} onChange={handleChange} className="form-control"/>
+                  <select className="form-select" name="status" value={usersInput.status} onChange={handleChange}>
+                    <option value="0">Inactive</option>
+                    <option value="1">New</option>
+                  </select>
                 ):
-                <input type="text" id="inputStatus" name='status' value={usersInput.status} onChange={handleChange} className="form-control" readOnly disabled/>
+                  <select className="form-select" name="status" value={usersInput.status} onChange={handleChange} readOnly disabled>
+                    <option value="0">Inactive</option>
+                    <option value="1">New</option>
+                    <option value="2">Active</option>
+                  </select>
                 }
                 </div>
               </div>
@@ -316,10 +324,10 @@ const UsersPage = () => {
               <td>{user.state}</td>
               <td>{user.city}</td>
               <td>{formatDate(user.dob)}</td>
-              <td>{user.sex}</td>
+              <td>{user.sex == 0 ? ("M") : user.sex == 1 ? ("F"): "O"}</td>
               <td>{user.email}</td>
-              <td>{user.role}</td>
-              <td>{user.status}</td>
+              <td>{user.role == 0 ? ("Admin") : user.role == 1 ? ("Member"): user.role == 2 ? ("Provider"): "Payer"}</td>
+              <td>{user.status == 0 ? ("Blocked") : user.status == 1 ? ("New"): "Active"}</td>
               <td className='p-1 ps-0 pe-0 tdbuttons'>
                 <button className='btn btn-primary m-1 pt-0 p-1' onClick={() => handleEdit(user)}><FaEdit/></button>
                 <button className='btn btn-danger ms-0 m-1 pt-0 p-1' onClick={() => handleDelete(user.userId)}><FaTrash/></button>

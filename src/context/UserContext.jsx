@@ -115,7 +115,6 @@ const UserProvider = ({ children }) => {
             if (response.ok)
             {
                 const usersResponse = await response.text();
-                console.log(usersResponse);
                 setUsers(JSON.parse(usersResponse));
                 setLastFetchTime(Date.now());
             }
@@ -127,7 +126,6 @@ const UserProvider = ({ children }) => {
         catch (error)
         {
             console.error('Error:', error);
-            return false;
         }
     }
 
@@ -201,7 +199,6 @@ const UserProvider = ({ children }) => {
             else
             {
                 const userResponse = await response.text();
-                console.log(userResponse);
                 setUser(JSON.parse(userResponse));
                 return true;
             }

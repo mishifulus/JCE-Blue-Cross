@@ -16,6 +16,7 @@ import SubmitClaimPage from './pages/SubmitClaimPage'
 import UsersPage from './pages/UsersPage'
 
 import { UserProvider } from './context/UserContext'
+import { PayerProvider } from './context/PayerContext'
 
 const App = () => {
 
@@ -23,6 +24,7 @@ const App = () => {
     <BrowserRouter>
       <UserProvider> 
         <Header/>
+        <PayerProvider>
           <Routes>
             <Route element = {<ProtectedRoutes allowedRoles={[0,1,2,3]}/>}>
               <Route exact path='/home' element={<HomePage/>} />
@@ -44,6 +46,7 @@ const App = () => {
             <Route exact path='/login' element={<LoginPage/>} />
             <Route path='*' element={<ErrorPage/>} />
           </Routes>
+          </PayerProvider>
         <Footer/>
       </UserProvider>
     </BrowserRouter>
