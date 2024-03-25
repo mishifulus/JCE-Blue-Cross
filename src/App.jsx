@@ -17,6 +17,7 @@ import UsersPage from './pages/UsersPage'
 
 import { UserProvider } from './context/UserContext'
 import { PayerProvider } from './context/PayerContext'
+import { ProviderProvider } from './context/ProviderContext'
 
 const App = () => {
 
@@ -25,6 +26,7 @@ const App = () => {
       <UserProvider> 
         <Header/>
         <PayerProvider>
+        <ProviderProvider>
           <Routes>
             <Route element = {<ProtectedRoutes allowedRoles={[0,1,2,3]}/>}>
               <Route exact path='/home' element={<HomePage/>} />
@@ -46,6 +48,7 @@ const App = () => {
             <Route exact path='/login' element={<LoginPage/>} />
             <Route path='*' element={<ErrorPage/>} />
           </Routes>
+          </ProviderProvider>
           </PayerProvider>
         <Footer/>
       </UserProvider>

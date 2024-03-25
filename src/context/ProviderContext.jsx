@@ -1,34 +1,35 @@
 import React, { createContext, useState, useEffect } from "react";
 
-const PayerContext = createContext();
+const ProviderContext = createContext();
 
-const PayerProvider = ({ children }) => {
+const ProviderProvider = ({ children }) => {
 
-    const [payers, setPayers] = useState([]);
-    const [payer, setPayer] = useState(null);
+    const [providers, setProviders] = useState([]);
+    const [provider, setProvider] = useState(null);
     const [lastFetchTime, setLastFetchTime] = useState(null);
 
     useEffect(() => {
-        if (!payers.length || !lastFetchTime || Date.now() - lastFetchTime > 60000)
+        if (!providers.length || !lastFetchTime || Date.now() - lastFetchTime > 60000)
         {
-            getPayers();
+            getProviders();
         }
     }, []);
 
-    const getPayers = async () =>
+    const getProviders = async () =>
     {
         try
         {
-            const response = await fetch('https://localhost:44304/api/Payor');
+            const response = await fetch('https://localhost:44304/api/Provider');
             if (response.ok)
             {
-                const payersResponse = await response.text();
-                setPayers(JSON.parse(payersResponse));
+                const providersResponse = await response.text();
+                console.log(providersResponse);
+                setProviders(JSON.parse(providersResponse));
                 setLastFetchTime(Date.now());
             }
             else
             {
-                console.error('Error al obtener los payers');
+                console.error('Error al obtener los providers');
             }
         }
         catch (error)
@@ -37,15 +38,16 @@ const PayerProvider = ({ children }) => {
         }
     };
 
-    const getPayer = async (payorId) =>
+    const getProvider = async (providerId) =>
     {
         try
         {
-            const response = await fetch(`https://localhost:44304/api/Payor/${payorId}`);
+            const response = await fetch(`https://localhost:44304/api/Provider/${providerId}`);
             if (response.ok)
             {
-                const payerResponse = await response.text();
-                setPayer(JSON.parse(payerResponse));
+                const providerResponse = await response.text();
+                console.log(providerResponse);
+                setProvider(JSON.parse(providerResponse));
                 return true;
             }
             else
@@ -60,16 +62,16 @@ const PayerProvider = ({ children }) => {
         }
     };
 
-    const putPayer = async(payorId, payorData) => 
+    const putProvider = async(providerId, providerData) => 
     {
         try
         {
-            const response = await fetch(`https://localhost:44304/api/Payor/${payorId}`, {
+            const response = await fetch(`https://localhost:44304/api/Provider/${providerId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(payorData)
+                body: JSON.stringify(providerData)
             });
             if (!response.ok)
             {
@@ -87,16 +89,16 @@ const PayerProvider = ({ children }) => {
         }
     };
 
-    const postPayer = async (payorData) =>
+    const postProvider = async (providerData) =>
     {
         try
         {
-            const response = await fetch('https://localhost:44304/api/Payor', {
+            const response = await fetch('https://localhost:44304/api/Provider', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(payorData)
+                body: JSON.stringify(providerData)
             });
             if (!response.ok)
             {
@@ -104,8 +106,9 @@ const PayerProvider = ({ children }) => {
             }
             else
             {
-                const payerResponse = await response.text();
-                setPayer(JSON.parse(payerResponse));
+                const providerResponse = await response.text();
+                console.log(providerResponse);
+                setProvider(JSON.parse(providerResponse));
                 return true;
             }
         }
@@ -116,11 +119,11 @@ const PayerProvider = ({ children }) => {
         }
     };
 
-    const deletePayer = async (payorId) => 
+    const deleteProvider = async (providerId) => 
     {
         try
         {
-            const response = await fetch(`https://localhost:44304/api/Payor/${payorId}`, {
+            const response = await fetch(`https://localhost:44304/api/Provider/${providerId}`, {
                 method: 'DELETE'
             });
             if (!response.ok)
@@ -139,14 +142,14 @@ const PayerProvider = ({ children }) => {
         }
     };
 
-    const data = { deletePayer, postPayer, putPayer, getPayer, getPayers, payer, payers };
-    
-    return(
-        <PayerContext.Provider value={data}>
+    const data = { deleteProvider, postProvider, putProvider, getProvider, getProviders, provider, providers};
+
+    return (
+        <ProviderContext.Provider value={data}>
             {children}
-        </PayerContext.Provider>
+        </ProviderContext.Provider>
     )
 }
 
-export { PayerProvider };
-export default PayerContext;
+export { ProviderProvider };
+export default ProviderContext;
