@@ -23,7 +23,6 @@ const ProviderProvider = ({ children }) => {
             if (response.ok)
             {
                 const providersResponse = await response.text();
-                console.log(providersResponse);
                 setProviders(JSON.parse(providersResponse));
                 setLastFetchTime(Date.now());
             }
@@ -46,7 +45,6 @@ const ProviderProvider = ({ children }) => {
             if (response.ok)
             {
                 const providerResponse = await response.text();
-                console.log(providerResponse);
                 setProvider(JSON.parse(providerResponse));
                 return true;
             }
@@ -79,6 +77,7 @@ const ProviderProvider = ({ children }) => {
             }
             else
             {
+                getProviders();
                 return true;
             }
         }
@@ -107,8 +106,8 @@ const ProviderProvider = ({ children }) => {
             else
             {
                 const providerResponse = await response.text();
-                console.log(providerResponse);
                 setProvider(JSON.parse(providerResponse));
+                getProviders();
                 return true;
             }
         }
@@ -132,6 +131,7 @@ const ProviderProvider = ({ children }) => {
             }
             else
             {
+                getProviders();
                 return true;
             }
         }

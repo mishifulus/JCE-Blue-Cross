@@ -170,6 +170,7 @@ const UserProvider = ({ children }) => {
             }
             else
             {
+                getUsers();
                 return true;
             }
         }
@@ -200,6 +201,7 @@ const UserProvider = ({ children }) => {
             {
                 const userResponse = await response.text();
                 setUser(JSON.parse(userResponse));
+                getUsers();
                 return true;
             }
         }
@@ -222,6 +224,7 @@ const UserProvider = ({ children }) => {
             }
             else
             {
+                getUsers();
                 return true;
             }
         }

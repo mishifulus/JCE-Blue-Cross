@@ -77,6 +77,7 @@ const PayerProvider = ({ children }) => {
             }
             else
             {
+                getPayers();
                 return true;
             }
         }
@@ -106,6 +107,7 @@ const PayerProvider = ({ children }) => {
             {
                 const payerResponse = await response.text();
                 setPayer(JSON.parse(payerResponse));
+                getPayers();
                 return true;
             }
         }
@@ -129,6 +131,7 @@ const PayerProvider = ({ children }) => {
             }
             else
             {
+                getPayers();
                 return true;
             }
         }
