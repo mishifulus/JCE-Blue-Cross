@@ -137,7 +137,7 @@ const ProviderFinderPage = () => {
     <div className='container' style={{  maxHeight: '80vh' }}>
       <div className='row container'>
         <div className='col-3 header'>
-          <h2 className='ms-4 mb-4'>Provider Finder</h2>
+          <h3 className='ms-4 mb-4 text-decoration-underline'>Provider Finder</h3>
         </div>
         {!seeForm ? (
         <div className='col-9 btnheader'>

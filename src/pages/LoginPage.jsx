@@ -40,7 +40,7 @@ const LoginPage = () => {
     if (auth == 1)
     {
       swal(
-        `You're welcome ${userInput.username} with ${userInput.password}`,
+        `You're welcome ${userInput.username}`,
         "Login",
         "success"
       );

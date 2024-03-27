@@ -6,7 +6,6 @@ const ErrorProvider = ({ children }) => {
 
     const [errors, setErrors] = useState([]);
     const [error, setError] = useState(null);
-    const [errorsBy, setErrorsBy] = useState([]);
     const [lastFetchTime, setLastFetchTime] = useState(null);
 
     useEffect(() => {
@@ -26,29 +25,6 @@ const ErrorProvider = ({ children }) => {
                 const errorsResponse = await response.text();
                 console.log(errorsResponse);
                 setErrors(JSON.parse(errorsResponse));
-                setLastFetchTime(Date.now());
-            }
-            else
-            {
-                console.error('Error al obtener los errores');
-            }
-        }
-        catch (error)
-        {
-            console.error('Error:', error);
-        }
-    };
-
-    const getErrorsByPayer = async (payerId) =>
-    {
-        try
-        {
-            const response = await fetch(`https://localhost:44304/api/Error/payer/${payerId}`);
-            if (response.ok)
-            {
-                const errorsResponse = await response.text();
-                console.log(errorsResponse);
-                setErrorsBy(JSON.parse(errorsResponse));
                 setLastFetchTime(Date.now());
             }
             else
@@ -159,7 +135,30 @@ const ErrorProvider = ({ children }) => {
             else
             {
                 getErrors();
-                return true;
+
+                const response = await fetch(`https://localhost:44304/api/PayorErrors/error/${errorId}`, {
+                method: 'DELETE'
+                });
+
+                if(!response.ok)
+                {
+                    return false;
+                }
+                else
+                {
+                    const response = await fetch(`https://localhost:44304/api/Conditions/error/${errorId}`, {
+                    method: 'DELETE'
+                    });
+
+                    if(!response.ok)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
             }
         }
         catch (error)
@@ -169,7 +168,7 @@ const ErrorProvider = ({ children }) => {
         }
     };
 
-    const data = { deleteError, postError, putError, getError, getErrors, getErrorsByPayer, error, errors, errorsBy };
+    const data = { deleteError, postError, putError, getError, getErrors, error, errors };
 
     return (
         <ErrorContext.Provider value={data}>
