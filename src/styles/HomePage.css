@@ -1,11 +1,11 @@
 .card {
-    width: 40rem;
+    width: 60rem;
     margin-left: auto;
     margin-right: auto;
-    border-width: 2px;
     display: flex;
     left: auto;
-    margin-top:13%;
+    margin-top:14%;
+    border: #fff;
 }
 
 .form-row {

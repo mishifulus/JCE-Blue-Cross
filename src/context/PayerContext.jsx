@@ -6,6 +6,7 @@ const PayerProvider = ({ children }) => {
 
     const [payers, setPayers] = useState([]);
     const [payer, setPayer] = useState(null);
+    const [payersActives, setPayersActives] = useState([]);
     const [lastFetchTime, setLastFetchTime] = useState(null);
 
     useEffect(() => {
@@ -24,6 +25,28 @@ const PayerProvider = ({ children }) => {
             {
                 const payersResponse = await response.text();
                 setPayers(JSON.parse(payersResponse));
+                setLastFetchTime(Date.now());
+            }
+            else
+            {
+                console.error('Error al obtener los payers');
+            }
+        }
+        catch (error)
+        {
+            console.error('Error:', error);
+        }
+    };
+
+    const getPayersActives = async () =>
+    {
+        try
+        {
+            const response = await fetch('https://localhost:44304/api/Payor/active');
+            if (response.ok)
+            {
+                const payersResponse = await response.text();
+                setPayersActives(JSON.parse(payersResponse));
                 setLastFetchTime(Date.now());
             }
             else
@@ -142,7 +165,7 @@ const PayerProvider = ({ children }) => {
         }
     };
 
-    const data = { deletePayer, postPayer, putPayer, getPayer, getPayers, payer, payers };
+    const data = { deletePayer, postPayer, putPayer, getPayer, getPayers, payer, payers, payersActives, getPayersActives };
     
     return(
         <PayerContext.Provider value={data}>

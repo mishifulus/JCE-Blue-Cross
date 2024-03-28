@@ -7,6 +7,7 @@ const UserProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [users, setUsers] = useState([]);
     const [user, setUser] = useState(null);
+    const [usersActives, setUsersActives] = useState([]);
     const [loginAttempts, setLoginAttempts] = useState(0);
     const [lastFetchTime, setLastFetchTime] = useState(null);
 
@@ -129,6 +130,28 @@ const UserProvider = ({ children }) => {
         }
     }
 
+    const getUsersActives = async () =>
+    {
+        try
+        {
+            const response = await fetch ('https://localhost:44304/api/User/active');
+            if (response.ok)
+            {
+                const usersResponse = await response.text();
+                setUsersActives(JSON.parse(usersResponse));
+                setLastFetchTime(Date.now());
+            }
+            else
+            {
+                console.error('Error al obtener los usuarios',);
+            }
+        }
+        catch (error)
+        {
+            console.error('Error:', error);
+        }
+    }
+
     const getUser = async (userId) =>
     {
         try
@@ -236,7 +259,7 @@ const UserProvider = ({ children }) => {
     };
 
 
-    const data = { currentUser, login, logout, deleteUser, postUser, putUser, getUser, getUsers, user, users };
+    const data = { currentUser, login, logout, deleteUser, postUser, putUser, getUser, getUsers, user, users, usersActives, getUsersActives };
 
     return(
         <UserContext.Provider value = {data}>

@@ -50,6 +50,7 @@ const App = () => {
               <Route exact path='/users' element={<UsersPage/>} />
             </Route>
             <Route exact path='/login' element={<LoginPage/>} />
+            <Route exact path='/' element={<LoginPage/>} />
             <Route path='*' element={<ErrorPage/>} />
           </Routes>
           </ErrorProvider> 

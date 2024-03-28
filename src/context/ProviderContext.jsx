@@ -6,6 +6,7 @@ const ProviderProvider = ({ children }) => {
 
     const [providers, setProviders] = useState([]);
     const [provider, setProvider] = useState(null);
+    const [providersActives, setProvidersActives] = useState([]);
     const [lastFetchTime, setLastFetchTime] = useState(null);
 
     useEffect(() => {
@@ -24,6 +25,28 @@ const ProviderProvider = ({ children }) => {
             {
                 const providersResponse = await response.text();
                 setProviders(JSON.parse(providersResponse));
+                setLastFetchTime(Date.now());
+            }
+            else
+            {
+                console.error('Error al obtener los providers');
+            }
+        }
+        catch (error)
+        {
+            console.error('Error:', error);
+        }
+    };
+
+    const getProvidersActives = async () =>
+    {
+        try
+        {
+            const response = await fetch('https://localhost:44304/api/Provider/active');
+            if (response.ok)
+            {
+                const providersResponse = await response.text();
+                setProvidersActives(JSON.parse(providersResponse));
                 setLastFetchTime(Date.now());
             }
             else
@@ -142,7 +165,7 @@ const ProviderProvider = ({ children }) => {
         }
     };
 
-    const data = { deleteProvider, postProvider, putProvider, getProvider, getProviders, provider, providers};
+    const data = { deleteProvider, postProvider, putProvider, getProvider, getProviders, provider, providers, providersActives, getProvidersActives};
 
     return (
         <ProviderContext.Provider value={data}>

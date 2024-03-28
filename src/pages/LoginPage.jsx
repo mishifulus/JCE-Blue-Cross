@@ -90,6 +90,7 @@ const LoginPage = () => {
 
   return (
     <div className='container-fluid container'>
+      <div className='text-light'>-</div>
         <div className="card">
           <div>
             <img src={logo} alt='Logo' height={'90px'}/>
@@ -115,7 +116,7 @@ const LoginPage = () => {
               <p className='text-danger fw-semibold'>{message}</p>
             </div>
             <div className="align-items-center">
-              <button className="btn btn-search me-5" id='btnReset' onClick={handleReset}>Reset</button>
+              <button className="btn btn-search ms-4 me-5" id='btnReset' onClick={handleReset}>Reset</button>
               <button className="btn btn-search" id='btnLogin' onClick={handleSubmit}>Login</button>
             </div>
           </div>

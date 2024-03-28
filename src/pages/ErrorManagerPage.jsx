@@ -218,9 +218,10 @@ const ErrorManagerPage = () => {
                 <div className='mb-3 row'>
                   <label className="col-sm-2 col-form-label">Payers disponibles</label>
                   <div className="col-sm-10">
-                    <select className="form-select" multiple >
+                    <select className="form-select" name="payers">
+                      <option value="">Select</option>
                       {payers.map(payer => (
-                        <option value={payer.payorId}>{payer.payorName}</option>
+                      <option value={payer.payorId}>{payer.payorId} - {payer.payorName} ({payer.payorAddress})</option>
                       ))}
                     </select>
                   </div>
