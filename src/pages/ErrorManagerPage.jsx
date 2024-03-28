@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import "../styles/Modules.css"
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaArrowUp, FaArrowDown } from 'react-icons/fa';
+import { RiAddCircleLine } from 'react-icons/ri';
 import swal from "sweetalert";
 import PayerContext from '../context/PayerContext'
 import UserContext from '../context/UserContext'
@@ -15,12 +16,19 @@ const ErrorManagerPage = () => {
   const [seeForm, setSeeForm] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const [seeFormPayers, setSeeFormPayers] = useState(false);
+
   const [errorsInput, setErrorsInput] = useState({
     errorId: 0,
     message: "",
     description: "",
     status: 1,
     registeringUser: currentUser
+  });
+
+  const [payerErrorInput, setErrorPayerInput] = useState({
+    error: null,
+    payor: null,
   });
 
   const handleChange = (e) => {
@@ -102,10 +110,11 @@ const ErrorManagerPage = () => {
         const currentTime = new Date().getTime();
         if (!lastFetchTime || (currentTime - parseInt(lastFetchTime)) > 60000) {
           await getErrors();
+          await getPayers();
           localStorage.setItem('lastFetchTime', currentTime.toString());
         }
       }
-      catch (errror)
+      catch (error)
       {
         console.error('Error al obtener errores:', error);
       }
@@ -115,7 +124,7 @@ const ErrorManagerPage = () => {
       }
     };
     fetchData();
-  }, [getErrors]);
+  }, [getErrors, getPayers]);
 
   const seeForms = () => 
   {
@@ -126,6 +135,17 @@ const ErrorManagerPage = () => {
   const seeFormf = () => 
   {
     setSeeForm(false);
+  };
+
+  const seeFormsP = (error) => 
+  {
+    setSeeFormPayers(true);
+    //handleResetP();
+  };
+
+  const seeFormfP = () => 
+  {
+    setSeeFormPayers(false);
   };
 
   return (
@@ -181,6 +201,59 @@ const ErrorManagerPage = () => {
         </div>
       ):null}
 
+      {seeFormPayers ? (
+        <>
+      <div className='row container'>
+        <div className='col-3'>
+          <h5 className='ms-4 mb-4 text-decoration-underline'>Payers</h5>
+        </div>
+        <div className='col-9 btnpayer'>
+          <button className='btn btn-danger fw-bold' onClick={seeFormfP}>X</button>
+        </div>
+      </div>
+        <div className='container'>
+          <div className='row'>
+            <div className='col-md-6 offset-md-3'>
+              <form>
+                <div className='mb-3 row'>
+                  <label className="col-sm-2 col-form-label">Payers disponibles</label>
+                  <div className="col-sm-10">
+                    <select className="form-select" multiple >
+                      {payers.map(payer => (
+                        <option value={payer.payorId}>{payer.payorName}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className='d-flex col-md-6 offset-md-5 mb-3'>
+                  <div className='col-2 ms-2'>
+                    <div className="row">
+                      <button className='btn btn-secondary'><FaArrowDown/></button>
+                    </div>
+                  </div>
+                  <div className='col-2 ms-5'>
+                    <div className="row">
+                      <button className='btn btn-secondary'><FaArrowUp/></button>
+                    </div>
+                  </div>
+                </div>
+                <div className='mb-3 row'>
+                  <label className="col-sm-2 col-form-label">Payers Aplicados</label>
+                  <div className="col-sm-10">
+                    <select className="form-select" multiple >
+                      <option value="1">One</option>
+                      <option value="2">Two</option>
+                      <option value="3">Three</option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        </>
+      ):null}
+
       <div className='col-10 tableModule'>
         <table className="table table-bordered border-dark">
           <thead>
@@ -204,7 +277,9 @@ const ErrorManagerPage = () => {
                 <td>{error.description}</td>
                 <td>{error.registeringUser.name} {error.registeringUser.lastName}</td>
                 <td className='p-1 ps-0 pe-0 tdbuttons'>
-                  <button className='btn btn-primary m-1 pt-0 p-1' onClick={() => handleEdit(error)}><FaEdit/></button>
+                  <button className='btn btn-success ms-0 m-1 pt-0 p-1' onClick={() => seeFormsP(error)}><RiAddCircleLine size={20}/></button>
+                  <button className='btn btn-warning ms-0 m-1 pt-0 p-1'><RiAddCircleLine size={20}/></button>
+                  <button className='btn btn-primary ms-0 m-1 pt-0 p-1' onClick={() => handleEdit(error)}><FaEdit/></button>
                   <button className='btn btn-danger ms-0 m-1 pt-0 p-1' onClick={() => handleDelete(error.errorId)}><FaTrash/></button>
                 </td>
               </tr>

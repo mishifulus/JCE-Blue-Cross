@@ -162,7 +162,7 @@ const ConfigPage = () => {
               <div className='mb-5 row'>
                 <label className="col-sm-2 col-form-label">Confirm Password</label>
                 <div className="col-sm-10">
-                  <input type="password" id="inputPassword" name='repassword' value={repassword} onChange={handleChangeP} className="form-control" minLength={1} maxLength={10}/>
+                  <input type="password" id="inputPasswordr" name='repassword' value={repassword} onChange={handleChangeP} className="form-control" minLength={1} maxLength={10}/>
                 </div>
               </div>
               <h5 className='ms-4 mb-3 text-decoration-underline text-sm-start'>Security Questions</h5>
