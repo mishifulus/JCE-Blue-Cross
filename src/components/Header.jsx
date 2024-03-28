@@ -54,31 +54,32 @@ const Header = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav">
-                        
+                        {currentUser?.status === 2 && (
                         <li className="nav-item">
                             <Link className="nav-link active" aria-current="page" to="/home">Home Page</Link>
                         </li>
-                        {(currentUser?.role === 1 || currentUser?.role === 0) && (
+                        )}
+                        {(currentUser?.role === 1 && currentUser?.status === 2 || currentUser?.role === 0 && currentUser?.status === 2) && (
                         <li className="nav-item">
                             <Link className="nav-link" to='/providerfinder'>Provider Finder</Link>
                         </li>
                         )}
-                        {(currentUser?.role === 2 || currentUser?.role === 0) && (
+                        {(currentUser?.role === 2 && currentUser?.status === 2 || currentUser?.role === 0 && currentUser?.status === 2) && (
                         <li className="nav-item">
                             <Link className="nav-link" to='/submitclaim'>Submit Claim</Link>
                         </li>
                         )}
-                        {(currentUser?.role === 3 || currentUser?.role === 0) && (
+                        {(currentUser?.role === 3 && currentUser?.status === 2 || currentUser?.role === 0 && currentUser?.status === 2) && (
                         <li className="nav-item">
                             <Link className="nav-link" to='/errormanager'>Error Manager</Link>
                         </li>
                         )}
-                        {(currentUser?.role === 3 || currentUser?.role === 0) && (
+                        {(currentUser?.role === 3 && currentUser?.status === 2 || currentUser?.role === 0 && currentUser?.status === 2) && (
                         <li className="nav-item">
                             <Link className="nav-link" to='/payorregistration'>Payor Registration</Link>
                         </li>
                         )}
-                        {currentUser?.role === 0 && (
+                        {currentUser?.role === 0 && currentUser?.status === 2 && (
                         <li className="nav-item">
                             <Link className="nav-link me-4" to='/users'>Users</Link>
                         </li>

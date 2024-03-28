@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const ConfigPage = () => {
 
-  const { putUser, currentUser } = useContext(UserContext);
+  const { putUser, currentUser, logout } = useContext(UserContext);
   const navigate = useNavigate();
 
   const [showPasswords, setShowPasswords] = useState({
@@ -19,6 +19,8 @@ const ConfigPage = () => {
     bossQuestion: false,
     bandQuestion: false,
   });
+
+  const [repassword, setRepassword] = useState(currentUser.password);
   
   const [usersInput, setUsersInput] = useState({
     userId: currentUser.userId,
@@ -51,6 +53,10 @@ const ConfigPage = () => {
       ...showPasswords,
       [field]: !showPasswords[field],
     });
+  };
+
+  const handleChangeP = (e) => {
+    setRepassword(e.target.value);
   };
 
   const handleChange = (e) => {
@@ -86,32 +92,45 @@ const ConfigPage = () => {
       bossQuestion: currentUser.bossQuestion,
       bandQuestion: currentUser.bandQuestion,
     });
+    setRepassword(currentUser.password);
   };
 
   const handleSubmit = async () => {
-    if (usersInput.userId)
-    {
-      if (usersInput.password == "")
+    if (repassword != usersInput.password)
       {
-        usersInput.password == currentUser.password;
+        swal(
+          `Password does not match`,
+          "Save",
+          "warning"
+        );
       }
+      else
+      {
+        if (usersInput.userId)
+        {
+          if (usersInput.password == "")
+          {
+            usersInput.password == currentUser.password;
+          }
 
-      putUser(usersInput.userId, usersInput);
-      swal(
-        `User saved`,
-        "Update",
-        "success"
-      );
-      navigate("/login");
-    }
-    else
-    {
-      swal(
-        `Error`,
-        "Save",
-        "warning"
-      );
-    }
+          putUser(usersInput.userId, usersInput);
+          swal(
+            `User saved`,
+            "Update",
+            "success"
+          );
+          logout();
+          navigate("/login");
+        }
+        else
+        {
+          swal(
+            `Error`,
+            "Save",
+            "warning"
+          );
+        }
+      }
     handleReset();
   }
 
@@ -134,10 +153,16 @@ const ConfigPage = () => {
                   <input type="text" id="inputUsername" name='username' value={usersInput.username} onChange={handleChange} className="form-control" minLength={1} maxLength={30}/>
                 </div>
               </div>
-              <div className='mb-5 row'>
+              <div className='mb-3 row'>
                 <label className="col-sm-2 col-form-label">Password</label>
                 <div className="col-sm-10">
                   <input type="password" id="inputPassword" name='password' value={usersInput.password} onChange={handleChange} className="form-control" minLength={1} maxLength={10}/>
+                </div>
+              </div>
+              <div className='mb-5 row'>
+                <label className="col-sm-2 col-form-label">Confirm Password</label>
+                <div className="col-sm-10">
+                  <input type="password" id="inputPassword" name='repassword' value={repassword} onChange={handleChangeP} className="form-control" minLength={1} maxLength={10}/>
                 </div>
               </div>
               <h5 className='ms-4 mb-3 text-decoration-underline text-sm-start'>Security Questions</h5>
@@ -145,56 +170,56 @@ const ConfigPage = () => {
                 <label className="col-form-label text-sm-start">What is the name of your mother?</label>
                 <div className="input-group col-sm-10">
                   <input type={showPasswords["motherQuestion"] ? "text" : "password"} className="form-control" name='motherQuestion' value={usersInput["motherQuestion"]} onChange={handleChange}/>
-                  <button className="btn btn-search" type="button" id="button-addon2" onClick={() => togglePasswordVisibility("motherQuestion")}>{showPasswords["motherQuestion"] ? "Hide" : "Show"}</button>
+                  <button className="btn btn-search" type="button" onClick={() => togglePasswordVisibility("motherQuestion")}>{showPasswords["motherQuestion"] ? "Hide" : "Show"}</button>
                 </div>
               </div>
               <div className='mb-3 row'>
                 <label className="col-form-label text-sm-start">What was your chilhood toy?</label>
                 <div className="input-group col-sm-10">
                   <input type={showPasswords["chilhoodQuestion"] ? "text" : "password"} className="form-control" name='chilhoodQuestion' value={usersInput["chilhoodQuestion"]} onChange={handleChange}/>
-                  <button className="btn btn-search" type="button" id="button-addon2" onClick={() => togglePasswordVisibility("chilhoodQuestion")}>{showPasswords["chilhoodQuestion"] ? "Hide" : "Show"}</button>
+                  <button className="btn btn-search" type="button" onClick={() => togglePasswordVisibility("chilhoodQuestion")}>{showPasswords["chilhoodQuestion"] ? "Hide" : "Show"}</button>
                 </div>
               </div>
               <div className='mb-3 row'>
                 <label className="col-form-label text-sm-start">What city are you from?</label>
                 <div className="input-group col-sm-10">
                   <input type={showPasswords["cityQuestion"] ? "text" : "password"} className="form-control" name='cityQuestion' value={usersInput["cityQuestion"]} onChange={handleChange}/>
-                  <button className="btn btn-search" type="button" id="button-addon2" onClick={() => togglePasswordVisibility("cityQuestion")}>{showPasswords["cityQuestion"] ? "Hide" : "Show"}</button>
+                  <button className="btn btn-search" type="button" onClick={() => togglePasswordVisibility("cityQuestion")}>{showPasswords["cityQuestion"] ? "Hide" : "Show"}</button>
                 </div>
               </div>
               <div className='mb-3 row'>
                 <label className="col-form-label text-sm-start">What was your first car?</label>
                 <div className="input-group col-sm-10">
                   <input type={showPasswords["carQuestion"] ? "text" : "password"} className="form-control" name='carQuestion' value={usersInput["carQuestion"]} onChange={handleChange}/>
-                  <button className="btn btn-search" type="button" id="button-addon2" onClick={() => togglePasswordVisibility("carQuestion")}>{showPasswords["carQuestion"] ? "Hide" : "Show"}</button>
+                  <button className="btn btn-search" type="button" onClick={() => togglePasswordVisibility("carQuestion")}>{showPasswords["carQuestion"] ? "Hide" : "Show"}</button>
                 </div>
               </div>
               <div className='mb-3 row'>
                 <label className="col-form-label text-sm-start">Where did you go to university?</label>
                 <div className="input-group col-sm-10">
                   <input type={showPasswords["universityQuestion"] ? "text" : "password"} className="form-control" name='universityQuestion' value={usersInput["universityQuestion"]} onChange={handleChange}/>
-                  <button className="btn btn-search" type="button" id="button-addon2" onClick={() => togglePasswordVisibility("universityQuestion")}>{showPasswords["universityQuestion"] ? "Hide" : "Show"}</button>
+                  <button className="btn btn-search" type="button" onClick={() => togglePasswordVisibility("universityQuestion")}>{showPasswords["universityQuestion"] ? "Hide" : "Show"}</button>
                 </div>
               </div>
               <div className='mb-3 row'>
                 <label className="col-form-label text-sm-start">What is your favorite sport?</label>
                 <div className="input-group col-sm-10">
                   <input type={showPasswords["sportQuestion"] ? "text" : "password"} className="form-control" name='sportQuestion' value={usersInput["sportQuestion"]} onChange={handleChange}/>
-                  <button className="btn btn-search" type="button" id="button-addon2" onClick={() => togglePasswordVisibility("sportQuestion")}>{showPasswords["sportQuestion"] ? "Hide" : "Show"}</button>
+                  <button className="btn btn-search" type="button" onClick={() => togglePasswordVisibility("sportQuestion")}>{showPasswords["sportQuestion"] ? "Hide" : "Show"}</button>
                 </div>
               </div>
               <div className='mb-3 row'>
                 <label className="col-form-label text-sm-start">Who was your first boss?</label>
                 <div className="input-group col-sm-10">
                   <input type={showPasswords["bossQuestion"] ? "text" : "password"} className="form-control" name='bossQuestion' value={usersInput["bossQuestion"]} onChange={handleChange}/>
-                  <button className="btn btn-search" type="button" id="button-addon2" onClick={() => togglePasswordVisibility("bossQuestion")}>{showPasswords["bossQuestion"] ? "Hide" : "Show"}</button>
+                  <button className="btn btn-search" type="button" onClick={() => togglePasswordVisibility("bossQuestion")}>{showPasswords["bossQuestion"] ? "Hide" : "Show"}</button>
                 </div>
               </div>
               <div className='mb-3 row'>
                 <label className="col-form-label text-sm-start">What is your favorite band?</label>
                 <div className="input-group col-sm-10">
                   <input type={showPasswords["bandQuestion"] ? "text" : "password"} className="form-control" name='bandQuestion' value={usersInput["bandQuestion"]} onChange={handleChange}/>
-                  <button className="btn btn-search" type="button" id="button-addon2" onClick={() => togglePasswordVisibility("bandQuestion")}>{showPasswords["bandQuestion"] ? "Hide" : "Show"}</button>
+                  <button className="btn btn-search" type="button" onClick={() => togglePasswordVisibility("bandQuestion")}>{showPasswords["bandQuestion"] ? "Hide" : "Show"}</button>
                 </div>
               </div>
 

@@ -7,7 +7,7 @@ import UserContext from '../context/UserContext';
 
 const LoginPage = () => {
 
-  const { login } = useContext(UserContext);
+  const { login, currentUser } = useContext(UserContext);
 
   const [userInput, setUserInput] = useState({
     username: "",

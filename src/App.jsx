@@ -30,21 +30,23 @@ const App = () => {
         <ProviderProvider>
         <ErrorProvider> 
           <Routes>
-            <Route element = {<ProtectedRoutes allowedRoles={[0,1,2,3]}/>}>
+            <Route element = {<ProtectedRoutes allowedRoles={[0,1,2,3]} allowedStates={[2]}/>}>
               <Route exact path='/home' element={<HomePage/>} />
+            </Route>
+            <Route element = {<ProtectedRoutes allowedRoles={[0,1,2,3]} allowedStates={[1,2]}/>}>
               <Route exact path='/config' element={<ConfigPage/>} />
             </Route>
-            <Route element = {<ProtectedRoutes allowedRoles={[0,1]}/>}>
+            <Route element = {<ProtectedRoutes allowedRoles={[0,1]} allowedStates={[2]}/>}>
               <Route exact path='/providerfinder' element={<ProviderFinderPage/>} />
             </Route>
-            <Route element = {<ProtectedRoutes allowedRoles={[0,2]}/>}>
+            <Route element = {<ProtectedRoutes allowedRoles={[0,2]} allowedStates={[2]}/>}>
               <Route exact path='/submitclaim' element={<SubmitClaimPage/>} />
             </Route>
-            <Route element = {<ProtectedRoutes allowedRoles={[0,3]}/>}>
+            <Route element = {<ProtectedRoutes allowedRoles={[0,3]} allowedStates={[2]}/>}>
               <Route exact path='/errormanager' element={<ErrorManagerPage/>} />
               <Route exact path='/payorregistration' element={<PayorRegistrationPage/>} />
             </Route>
-            <Route element = {<ProtectedRoutes allowedRoles={[0]}/>}>
+            <Route element = {<ProtectedRoutes allowedRoles={[0]} allowedStates={[2]}/>}>
               <Route exact path='/users' element={<UsersPage/>} />
             </Route>
             <Route exact path='/login' element={<LoginPage/>} />
