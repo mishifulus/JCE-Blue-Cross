@@ -16,7 +16,16 @@ const ConditionProvider = ({ children }) => {
             {
                 const conditionsResponse = await response.text();
                 console.log(conditionsResponse);
-                setConditionsByError(JSON.parse(conditionsResponse));
+
+                if (conditionsResponse.trim() !== "")
+                {
+                    setConditionsByError(JSON.parse(conditionsResponse));
+                }
+                else
+                {
+                    setConditionsByError([]);
+                }
+                
             }
             else
             {

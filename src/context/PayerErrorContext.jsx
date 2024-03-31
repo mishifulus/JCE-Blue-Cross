@@ -16,11 +16,19 @@ const PayerErrorProvider = ({ children }) =>
             {
                 const payorsResponse = await response.text();
                 console.log(payorsResponse);
-                setPayerErrorsByError(JSON.parse(payorsResponse));
+
+                if (payorsResponse.trim() !== "")
+                {
+                    setPayerErrorsByError(JSON.parse(payorsResponse));
+                }
+                else
+                {
+                    setPayerErrorsByError([]);
+                }
             }
             else
             {
-                console.error("Error al obtener los payers por error");
+                console.error(`Error al obtener los payers por error: ${response.status} - ${response.statusText}`);
             }
         }
         catch (error)
@@ -31,16 +39,16 @@ const PayerErrorProvider = ({ children }) =>
 
     // VER ERRORES POR PAYOR
 
-    const postPayorError = async (payorErrorData, errorId) =>
+    const postPayorError = async (errorId, payorId) =>
     {
         try
         {
-            const response = await fetch('https://localhost:44304/api/PayorErrors', {
+            const response = await fetch(`https://localhost:44304/api/PayorErrors?errorId=${errorId}&payorId=${payorId}`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'text/plain'
                 },
-                body: JSON.stringify(payorErrorData)
+                body: ''
             });
 
             if (!response.ok)
@@ -52,7 +60,7 @@ const PayerErrorProvider = ({ children }) =>
                 const payerErrorResponse = await response.text();
                 console.log(payerErrorResponse);
                 setPayerError(JSON.parse(payerErrorResponse));
-                getPayorErrorsByError(errorId);
+                await getPayorErrorsByError(errorId);
                 return true;
             }
         }
@@ -63,11 +71,11 @@ const PayerErrorProvider = ({ children }) =>
         }
     };
 
-    const deletePayerError = async (payorErrorId, errorId) =>
+    const deletePayerError = async (errorId, payorId) =>
     {
         try
         {
-            const response = await fetch(`https://localhost:44304/api/PayorErrors/${payorErrorId}`, {
+            const response = await fetch(`https://localhost:44304/api/PayorErrors/error/${errorId}/payor/${payorId}`, {
                 method: 'DELETE'
             });
 

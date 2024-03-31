@@ -19,6 +19,9 @@ import { UserProvider } from './context/UserContext'
 import { PayerProvider } from './context/PayerContext'
 import { ProviderProvider } from './context/ProviderContext'
 import { ErrorProvider } from './context/ErrorContext'
+import { PayerErrorProvider } from './context/PayerErrorContext'
+import { ConditionProvider } from './context/ConditionContext'
+import { ClaimProvider } from './context/ClaimContext'
 
 const App = () => {
 
@@ -29,6 +32,9 @@ const App = () => {
         <PayerProvider>
         <ProviderProvider>
         <ErrorProvider> 
+        <PayerErrorProvider>
+        <ConditionProvider>
+        <ClaimProvider>
           <Routes>
             <Route element = {<ProtectedRoutes allowedRoles={[0,1,2,3]} allowedStates={[2]}/>}>
               <Route exact path='/home' element={<HomePage/>} />
@@ -52,10 +58,13 @@ const App = () => {
             <Route exact path='/login' element={<LoginPage/>} />
             <Route exact path='/' element={<LoginPage/>} />
             <Route path='*' element={<ErrorPage/>} />
-          </Routes>
-          </ErrorProvider> 
-          </ProviderProvider>
-          </PayerProvider>
+        </Routes>
+        </ClaimProvider>
+        </ConditionProvider>
+        </PayerErrorProvider>
+        </ErrorProvider> 
+        </ProviderProvider>
+        </PayerProvider>
         <Footer/>
       </UserProvider>
     </BrowserRouter>
