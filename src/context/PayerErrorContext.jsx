@@ -15,7 +15,6 @@ const PayerErrorProvider = ({ children }) =>
             if(response.ok)
             {
                 const payorsResponse = await response.text();
-                console.log(payorsResponse);
 
                 if (payorsResponse.trim() !== "")
                 {
@@ -58,7 +57,6 @@ const PayerErrorProvider = ({ children }) =>
             else
             {
                 const payerErrorResponse = await response.text();
-                console.log(payerErrorResponse);
                 setPayerError(JSON.parse(payerErrorResponse));
                 await getPayorErrorsByError(errorId);
                 return true;

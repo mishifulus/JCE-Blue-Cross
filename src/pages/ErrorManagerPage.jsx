@@ -348,7 +348,7 @@ const ErrorManagerPage = () => {
                 <div className='mb-3 row'>
                   <label className="col-sm-2 col-form-label">Description</label>
                   <div className="col-sm-10">
-                    <input type="text" id="inputAddress" name='description' value={errorsInput.description} onChange={handleChange} className="form-control" minLength={1} maxLength={200} />
+                    <textarea className="form-control" name='description' value={errorsInput.description} onChange={handleChange} rows="3" minLength={1} maxLength={200}></textarea>
                   </div>
                 </div>
               </form>

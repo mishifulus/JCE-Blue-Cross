@@ -15,7 +15,6 @@ const ConditionProvider = ({ children }) => {
             if(response.ok)
             {
                 const conditionsResponse = await response.text();
-                console.log(conditionsResponse);
 
                 if (conditionsResponse.trim() !== "")
                 {
@@ -85,7 +84,6 @@ const ConditionProvider = ({ children }) => {
             else
             {
                 const conditionResponse = await response.text();
-                console.log(conditionResponse);
                 setCondition(JSON.parse(conditionResponse));
                 getConditionsByError(errorId);
                 return true;

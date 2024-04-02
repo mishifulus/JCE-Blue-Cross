@@ -23,7 +23,6 @@ const ErrorProvider = ({ children }) => {
             if (response.ok)
             {
                 const errorsResponse = await response.text();
-                console.log(errorsResponse);
                 setErrors(JSON.parse(errorsResponse));
                 setLastFetchTime(Date.now());
             }
@@ -46,7 +45,6 @@ const ErrorProvider = ({ children }) => {
             if (response.ok)
             {
                 const errorResponse = await response.text();
-                console.log(errorResponse);
                 setError(JSON.parse(errorResponse));
                 return true;
             }
@@ -108,7 +106,6 @@ const ErrorProvider = ({ children }) => {
             else
             {
                 const errorResponse = await response.text();
-                console.log(errorResponse);
                 setError(JSON.parse(errorResponse));
                 getErrors();
                 return true;

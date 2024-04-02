@@ -44,3 +44,8 @@ td {
 .container {
     margin-bottom: 1% !important;
 }
+
+.btn-static {
+    color: #fff;
+    background-color: #0890DC;
+}
