@@ -64,28 +64,60 @@ const ErrorManagerPage = () => {
   };
 
   const handleSubmit = async () => {
-    if (errorsInput.errorId)
+    if (errorsInput.message == "" || errorsInput.description == "")
     {
-      putError(errorsInput.errorId, errorsInput);
       swal(
-        `Error saved`,
-        "Update",
-        "success"
+        `There are empty required fields`,
+        "Register",
+        "warning"
       );
-      await getErrors();
     }
     else
     {
-      postError(errorsInput);
-      swal(
-        `Error saved`,
-        "Register",
-        "success"
-      );
+      if (errorsInput.errorId)
+      {
+        var result = await putError(errorsInput.errorId, errorsInput);
+        if (result)
+        {
+          swal(
+            `Error saved`,
+            "Update",
+            "success"
+          );
+        }
+        else
+        {
+          swal(
+            `ERROR`,
+            "Register",
+            "error"
+          );
+        }
+      }
+      else
+      {
+        var result = await postError(errorsInput);
+        if (result)
+        {
+          swal(
+            `Error saved`,
+            "Update",
+            "success"
+          );
+        }
+        else
+        {
+          swal(
+            `ERROR`,
+            "Register",
+            "error"
+          );
+        }
+      }
       await getErrors();
+      handleReset();
+      setSeeForm(false);
     }
-    handleReset();
-    setSeeForm(false);
   };
 
   const handleDelete = async (id) => {
@@ -105,7 +137,7 @@ const ErrorManagerPage = () => {
       swal(
         `Error`,
         "Delete",
-        "warning"
+        "error"
       );
     }
   };
@@ -165,12 +197,23 @@ const ErrorManagerPage = () => {
     e.preventDefault();
     try
     {
-      await postPayorError(payerErrorInput.errorId, payerErrorInput.payorId);
-      swal(
-        `Payer saved`,
-        "Register",
-        "success"
-      );
+      var result = await postPayorError(payerErrorInput.errorId, payerErrorInput.payorId);
+      if (result)
+      {
+        swal(
+          `Payer saved`,
+          "Register",
+          "success"
+        );
+      }
+      else
+      {
+        swal(
+          `ERROR`,
+          "Register",
+          "error"
+        );
+      }
     }
     catch (error)
     {
@@ -230,6 +273,16 @@ const ErrorManagerPage = () => {
     });
   };
 
+  const handleResetCondition = () => {
+    setConditionInput({
+      conditionId: 0,
+      field: "",
+      conditionLabel: "",
+      value: "",
+      errorId: 0
+    });
+  };
+
   const handleEditCondition = (condition, event) => {
     event.preventDefault();
 
@@ -241,39 +294,73 @@ const ErrorManagerPage = () => {
   const handleSubmitCondition = async (e) => {
     e.preventDefault();
 
-    if (conditionInput.conditionId)
+    if (conditionInput.field == "" || conditionInput.conditionLabel == "" || conditionInput.value == "")
     {
-      try
-      {
-        await putCondition(conditionInput.conditionId, conditionInput, conditionInput.errorId)
-        swal(
-          `Condition saved`,
-          "Register",
-          "success"
-        );
-      }
-      catch (error)
-      {
-        console.error('Error while handling condition submission:', error);
-      }
+      swal(
+        `There are empty required fields`,
+        "Register",
+        "warning"
+      );
     }
     else
     {
-      try
+      if (conditionInput.conditionId)
       {
-        await postCondition(conditionInput, conditionInput.errorId)
-        swal(
-          `Condition saved`,
-          "Register",
-          "success"
-        );
+        try
+        {
+          var result = await putCondition(conditionInput.conditionId, conditionInput, conditionInput.errorId)
+          if(result)
+          {
+            swal(
+              `Condition saved`,
+              "Register",
+              "success"
+            );
+          }
+          else
+          {
+            swal(
+              `ERROR`,
+              "Register",
+              "error"
+            );
+          }
+        }
+        catch (error)
+        {
+          console.error('Error while handling condition submission:', error);
+        }
       }
-      catch (error)
+      else
       {
-        console.error('Error while handling condition submission:', error);
+        try
+        {
+          var result = await postCondition(conditionInput, conditionInput.errorId)
+          if(result)
+          {
+            swal(
+              `Condition saved`,
+              "Register",
+              "success"
+            );
+          }
+          else
+          {
+            swal(
+              `ERROR`,
+              "Register",
+              "error"
+            );
+          }
+        }
+        catch (error)
+        {
+          console.error('Error while handling condition submission:', error);
+        }
       }
+      handleResetCondition();
+      await getConditionsByError(conditionInput.errorId);
     }
-    await getConditionsByError(conditionInput.errorId);
   };
 
   const handleDeleteCondition = async (conditionId, errorId, event) => {
@@ -340,18 +427,21 @@ const ErrorManagerPage = () => {
               <form>
                 <input type="text" id="inputId" name='errorId' value={errorsInput.errorId} onChange={handleChange} className="ms-4 form-control" hidden={true} readOnly disabled/>
                 <div className='mb-3 row'>
-                  <label className="col-sm-2 col-form-label">Message</label>
-                  <div className="col-sm-10">
-                    <input type="text" id="inputName" name='message' value={errorsInput.message} onChange={handleChange} className="form-control" minLength={1} maxLength={60}/>
+                  <label className="col-sm-3 col-form-label">Message *</label>
+                  <div className="col-sm-9">
+                    <input type="text" id="inputName" name='message' value={errorsInput.message} onChange={handleChange} className="form-control" minLength={1} maxLength={60} required/>
                   </div>
                 </div>
                 <div className='mb-3 row'>
-                  <label className="col-sm-2 col-form-label">Description</label>
-                  <div className="col-sm-10">
-                    <textarea className="form-control" name='description' value={errorsInput.description} onChange={handleChange} rows="3" minLength={1} maxLength={200}></textarea>
+                  <label className="col-sm-3 col-form-label">Description *</label>
+                  <div className="col-sm-9">
+                    <textarea className="form-control" name='description' value={errorsInput.description} onChange={handleChange} rows="3" minLength={1} maxLength={200} required></textarea>
                   </div>
                 </div>
               </form>
+            </div>
+            <div className='mb-2 text-start ms-5'>
+                * Datos obligatorios
             </div>
           </div>
           <div className='d-flex col-md-6 offset-md-6 mb-4'>
@@ -386,7 +476,7 @@ const ErrorManagerPage = () => {
                 <div className='row'>
                   <label className="col-sm-2 col-form-label">Available Payers</label>
                   <div className="col-sm-10">
-                    <select className="form-select mt-2" name="payor" onChange={handleChangePayor}>
+                    <select className="form-select mt-2" name="payor" onChange={handleChangePayor} required>
                       <option value="">Select</option>
                       {payersActives.map(payer => (
                       <option key={payer.payorId} value={payer.payorId}>{payer.payorId} - {payer.payorName} ({payer.payorAddress})</option>
@@ -456,9 +546,9 @@ const ErrorManagerPage = () => {
               <form>
                 <div className='row mb-3'>
                   <input type="text" name='value' value={conditionInput.conditionId} className="form-control" onChange={handleChangeCondition} hidden disabled/>
-                  <label className="col-sm-2 col-form-label">Field</label>
+                  <label className="col-sm-2 col-form-label">Field *</label>
                   <div className="col-sm-10">
-                    <select className="form-select" name="field" onChange={handleChangeCondition} value={conditionInput.field}>
+                    <select className="form-select" name="field" onChange={handleChangeCondition} value={conditionInput.field} required>
                       <option value="">Select</option>
                       <option value="zipCode">Zip Code</option>
                       <option value="state">State</option>
@@ -517,9 +607,9 @@ const ErrorManagerPage = () => {
                   </div>
                 </div>
                 <div className='row mb-3'>
-                  <label className="col-sm-2 col-form-label">Condition</label>
+                  <label className="col-sm-2 col-form-label">Condition *</label>
                   <div className="col-sm-10">
-                    <select className="form-select" name="conditionLabel" onChange={handleChangeCondition} value={conditionInput.conditionLabel}>
+                    <select className="form-select" name="conditionLabel" onChange={handleChangeCondition} value={conditionInput.conditionLabel} required>
                       <option value="">Select</option>
                       <option value="0">Equal to</option>
                       <option value="1">More or equal to</option>
@@ -529,10 +619,13 @@ const ErrorManagerPage = () => {
                   </div>
                 </div>
                 <div className='row mb-3'>
-                  <label className="col-sm-2 col-form-label">Value</label>
+                  <label className="col-sm-2 col-form-label">Value *</label>
                   <div className="col-sm-10">
-                    <input type="text" name='value' value={conditionInput.value} className="form-control" onChange={handleChangeCondition}/>
+                    <input type="text" name='value' value={conditionInput.value} className="form-control" onChange={handleChangeCondition} required/>
                   </div>
+                </div>
+                <div className='mb-2 text-start'>
+                  * Datos obligatorios
                 </div>
                 <div className='d-flex col-md-9 offset-md-6 mb-3'>
                   <div className='col-2 ms-2'>

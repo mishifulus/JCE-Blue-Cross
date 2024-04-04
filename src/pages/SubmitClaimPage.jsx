@@ -10,7 +10,7 @@ import ClaimContext from '../context/ClaimContext';
 
 const SubmitClaimPage = () => {
 
-  const { postClaim, deleteClaim, putClaim, getClaim, getClaims, claim, claims } = useContext(ClaimContext);
+  const { postClaim, deleteClaim, putClaim, getClaims, claims } = useContext(ClaimContext);
   const { getProvidersActives, providersActives } = useContext(ProviderContext);
   const { getUsersActives, usersActives } = useContext(UserContext);
   const { getPayersActives, payersActives } = useContext(PayerContext);
@@ -148,7 +148,7 @@ const SubmitClaimPage = () => {
   };
 
   const handleSubmit = async () => {
-    if (claimInput.claimNumber == "")
+    if (claimInput.claimNumber == "" || claimInput.memberUserId == 0 || claimInput.providerId == 0 || claimInput.payorId == 0 || claimInput.entryDate == "" || claimInput.dischargeDate == "" || claimInput.entryHour == "" || claimInput.dischargeHour == "" || claimInput.typeBill == "" || claimInput.referalNum == "" ||claimInput.serviceCode == "" || claimInput.authCode == "" || claimInput.medicalRecordNumber == "" || claimInput.payerClaimControlNumber == "" || claimInput.fileInf == "" || claimInput.claimNote == "" || claimInput.billingNote == "")
     {
       swal(
         `There are empty required fields`,
@@ -318,7 +318,7 @@ const SubmitClaimPage = () => {
                 <h5 className='ms-4 mb-4 text-decoration-underline'>Member Information</h5>
               </div>
               <div className='mb-3 row'>
-                <label className="col-sm-2 col-form-label mt-2 fw-bolder text-end">Member</label>
+                <label className="col-sm-2 col-form-label mt-2 fw-bolder text-end">Member *</label>
                 <div className="col-sm-10">
                   <select className="form-select mt-2" name="memberUserId" onChange={handleChange} required value={claimInput.memberUserId}>
                     <option value="">Select</option>
@@ -332,7 +332,7 @@ const SubmitClaimPage = () => {
                 <h5 className='ms-4 mb-4 mt-5 text-decoration-underline'>Payer Information</h5>
               </div>
               <div className='mb-3 row'>
-                <label className="col-sm-2 col-form-label mt-2 fw-bolder text-end">Payer</label>
+                <label className="col-sm-2 col-form-label mt-2 fw-bolder text-end">Payer *</label>
                 <div className="col-sm-10">
                   <select className="form-select mt-2" name="payorId" onChange={handleChange} required value={claimInput.payorId}>
                     <option value="">Select</option>
@@ -346,7 +346,7 @@ const SubmitClaimPage = () => {
                 <h5 className='ms-4 mb-4 mt-5 text-decoration-underline'>Provider Information</h5>
               </div>
               <div className='mb-3 row'>
-                <label className="col-sm-2 col-form-label mt-2 fw-bolder text-end">Provider</label>
+                <label className="col-sm-2 col-form-label mt-2 fw-bolder text-end">Provider *</label>
                 <div className="col-sm-10">
                   <select className="form-select mt-2" name="providerId" onChange={handleChange} required value={claimInput.providerId}>
                     <option value="">Select</option>
@@ -370,9 +370,9 @@ const SubmitClaimPage = () => {
                 </div>
                 <div className='col-md-6 '>
                   <div className='mb-3 row'>
-                    <label className="col-sm-3 col-form-label p-0 mt-1 text-end">Claim Number</label>
+                    <label className="col-sm-3 col-form-label p-0 text-end">Claim Number *</label>
                     <div className="col-sm-8">
-                      <input type="text" name='claimNumber' value={claimInput.claimNumber} onChange={handleChange} className="form-control" maxLength={10} required/>
+                      <input type="text" name='claimNumber' value={claimInput.claimNumber} onChange={handleChange} className="form-control mt-1" maxLength={10} required/>
                     </div>
                   </div>
                 </div>
@@ -380,7 +380,7 @@ const SubmitClaimPage = () => {
               <div className='row d-flex offset-md-1'>
                 <div className='col-md-6'>
                   <div className='mb-3 row'>
-                    <label className="col-sm-3 col-form-label p-1 text-end">Entry Date</label>
+                    <label className="col-sm-3 col-form-label p-1 text-end">Entry Date *</label>
                     <div className="col-sm-8">
                     <input type="date" name='entryDate' value={claimInput.entryDate} onChange={handleChange} className="form-control date" minLength={10} maxLength={10} required/>
                     </div>
@@ -388,7 +388,7 @@ const SubmitClaimPage = () => {
                 </div>
                 <div className='col-md-6 '>
                   <div className='mb-3 row'>
-                    <label className="col-sm-3 col-form-label p-0 mt-0 text-end mt-1">Discharge Date</label>
+                    <label className="col-sm-3 col-form-label p-0 mt-0 text-end mt-1">Discharge Date *</label>
                     <div className="col-sm-8">
                       <input type="date" name='dischargeDate' value={claimInput.dischargeDate} onChange={handleChange} className="form-control" minLength={10} maxLength={10} required/>
                     </div>
@@ -398,7 +398,7 @@ const SubmitClaimPage = () => {
               <div className='row d-flex offset-md-1'>
                 <div className='col-md-6'>
                   <div className='mb-3 row'>
-                    <label className="col-sm-3 col-form-label p-0 mt-1 text-end">Entry Hour</label>
+                    <label className="col-sm-3 col-form-label p-0 mt-1 text-end">Entry Hour *</label>
                     <div className="col-sm-8">
                       <input type="time" name='entryHour' value={claimInput.entryHour} onChange={handleChange} className="form-control" required/>
                     </div>
@@ -406,7 +406,7 @@ const SubmitClaimPage = () => {
                 </div>
                 <div className='col-md-6 '>
                   <div className='mb-3 row'>
-                    <label className="col-sm-3 col-form-label p-0 mt-0 text-end mt-1">Discharge Hour</label>
+                    <label className="col-sm-3 col-form-label p-0 mt-0 text-end mt-1">Discharge Hour *</label>
                     <div className="col-sm-8">
                       <input type="time" name='dischargeHour' value={claimInput.dischargeHour} onChange={handleChange} className="form-control" required/>
                     </div>
@@ -434,7 +434,7 @@ const SubmitClaimPage = () => {
               <div className='row d-flex offset-md-1'>
                 <div className='col-md-6'>
                   <div className='mb-3 row'>
-                    <label className="col-sm-3 col-form-label p-0 mt-1 text-end">Type of Bill</label>
+                    <label className="col-sm-3 col-form-label p-0 mt-1 text-end">Type of Bill *</label>
                     <div className="col-sm-8">
                       <input type="text" name='typeBill' value={claimInput.typeBill} onChange={handleChange} className="form-control" maxLength={10} required/>
                     </div>
@@ -442,7 +442,7 @@ const SubmitClaimPage = () => {
                 </div>
                 <div className='col-md-6 '>
                   <div className='mb-3 row'>
-                    <label className="col-sm-3 col-form-label p-0 mt-0 text-end mt-1">Referal Num</label>
+                    <label className="col-sm-3 col-form-label p-0 mt-0 text-end mt-1">Referal Num *</label>
                     <div className="col-sm-8">
                       <input type="text" name='referalNum' value={claimInput.referalNum} onChange={handleChange} className="form-control" maxLength={10} required/>
                     </div>
@@ -452,7 +452,7 @@ const SubmitClaimPage = () => {
               <div className='row d-flex offset-md-1'>
                 <div className='col-md-6'>
                   <div className='mb-3 row'>
-                    <label className="col-sm-3 col-form-label p-0 text-end mt-1">Service Code</label>
+                    <label className="col-sm-3 col-form-label p-0 text-end mt-1">Service Code *</label>
                     <div className="col-sm-8">
                       <input type="text" name='serviceCode' value={claimInput.serviceCode} onChange={handleChange} className="form-control" maxLength={10} required/>
                     </div>
@@ -460,7 +460,7 @@ const SubmitClaimPage = () => {
                 </div>
                 <div className='col-md-6 '>
                   <div className='mb-3 row'>
-                    <label className="col-sm-3 col-form-label p-0 mt-1 text-end">Auth Code</label>
+                    <label className="col-sm-3 col-form-label p-0 mt-1 text-end">Auth Code *</label>
                     <div className="col-sm-8">
                       <input type="text" name='authCode' value={claimInput.authCode} onChange={handleChange} className="form-control" maxLength={10} required/>
                     </div>
@@ -470,7 +470,7 @@ const SubmitClaimPage = () => {
               <div className='row d-flex offset-md-1'>
                 <div className='col-md-6'>
                   <div className='mb-3 row'>
-                    <label className="col-sm-3 col-form-label p-0 text-end">Medical Record Number</label>
+                    <label className="col-sm-3 col-form-label p-0 text-end">Medical Record Number *</label>
                     <div className="col-sm-8">
                       <input type="text" name='medicalRecordNumber' value={claimInput.medicalRecordNumber} onChange={handleChange} className="form-control mt-1" maxLength={10} required/>
                     </div>
@@ -478,7 +478,7 @@ const SubmitClaimPage = () => {
                 </div>
                 <div className='col-md-6 '>
                   <div className='mb-3 row'>
-                    <label className="col-sm-3 col-form-label p-0 text-end">Payer Claim Control Number</label>
+                    <label className="col-sm-3 col-form-label p-0 text-end">Payer Claim Control Number *</label>
                     <div className="col-sm-8">
                       <input type="text" name='payerClaimControlNumber' value={claimInput.payerClaimControlNumber} onChange={handleChange} className="form-control mt-1" maxLength={10} required/>
                     </div>
@@ -496,7 +496,7 @@ const SubmitClaimPage = () => {
                 </div>
                 <div className='col-md-6 '>
                   <div className='mb-3 row'>
-                    <label className="col-sm-3 col-form-label p-0 mt-1 text-end mt-1">File Inf</label>
+                    <label className="col-sm-3 col-form-label p-0 mt-1 text-end mt-1">File Inf *</label>
                     <div className="col-sm-8">
                       <input type="text" name='fileInf' value={claimInput.fileInf} onChange={handleChange} className="form-control" maxLength={10} required/>
                     </div>
@@ -506,7 +506,7 @@ const SubmitClaimPage = () => {
               <div className='row d-flex offset-md-1'>
                 <div className='col-md-12'>
                   <div className='mb-3 row'>
-                    <label className="col-sm-2 col-form-label p-0 text-end mt-4">Claim Note</label>
+                    <label className="col-sm-2 col-form-label p-0 text-end mt-4">Claim Note *</label>
                     <div className="col-sm-9">
                       <textarea className="form-control" name='claimNote' value={claimInput.claimNote} onChange={handleChange} rows="3" minLength={1}></textarea>
                     </div>
@@ -516,7 +516,7 @@ const SubmitClaimPage = () => {
               <div className='row d-flex offset-md-1'>
                 <div className='col-md-12'>
                   <div className='mb-3 row'>
-                    <label className="col-sm-2 col-form-label p-0 text-end mt-4">Billing Note</label>
+                    <label className="col-sm-2 col-form-label p-0 text-end mt-4">Billing Note *</label>
                     <div className="col-sm-9">
                       <textarea className="form-control" name='billingNote' value={claimInput.billingNote} onChange={handleChange} rows="3" minLength={1}></textarea>
                     </div>
@@ -791,7 +791,7 @@ const SubmitClaimPage = () => {
               <div className='row d-flex offset-md-6'>
                 <div className='col-md-12'>
                   <div className='mb-3 row'>
-                    <label className="col-sm-4 col-form-label p-0 mt-2 text-end">Cost for Service</label>
+                    <label className="col-sm-4 col-form-label p-0 mt-2 text-end">Cost for Service *</label>
                     <div className="col-sm-5">
                       <div className="input-group">
                         <span className="input-group-text" id="basic-addon1">$</span>
@@ -804,7 +804,7 @@ const SubmitClaimPage = () => {
               <div className='row d-flex offset-md-6'>
                 <div className='col-md-12'>
                   <div className='mb-3 row'>
-                    <label className="col-sm-4 col-form-label p-0 mt-2 text-end">Cost of Material</label>
+                    <label className="col-sm-4 col-form-label p-0 mt-2 text-end">Cost of Material *</label>
                     <div className="col-sm-5">
                       <div className="input-group">
                         <span className="input-group-text" id="basic-addon1">$</span>
@@ -817,7 +817,7 @@ const SubmitClaimPage = () => {
               <div className='row d-flex offset-md-6'>
                 <div className='col-md-12'>
                   <div className='mb-3 row'>
-                    <label className="col-sm-4 col-form-label p-0 mt-2 text-end">Cost of Medicine</label>
+                    <label className="col-sm-4 col-form-label p-0 mt-2 text-end">Cost of Medicine *</label>
                     <div className="col-sm-5">
                       <div className="input-group">
                         <span className="input-group-text" id="basic-addon1">$</span>
@@ -830,7 +830,7 @@ const SubmitClaimPage = () => {
               <div className='row d-flex offset-md-6'>
                 <div className='col-md-12'>
                   <div className='mb-3 row'>
-                    <label className="col-sm-4 col-form-label p-0 mt-2 text-end">Provider Cost</label>
+                    <label className="col-sm-4 col-form-label p-0 mt-2 text-end">Provider Cost *</label>
                     <div className="col-sm-5">
                       <div className="input-group">
                         <span className="input-group-text" id="basic-addon1">$</span>
@@ -843,7 +843,7 @@ const SubmitClaimPage = () => {
               <div className='row d-flex offset-md-6 mb-5'>
                 <div className='col-md-12'>
                   <div className='mb-3 row'>
-                    <label className="col-sm-4 col-form-label p-0 mt-2 text-end fw-medium">TOTAL AMOUNT</label>
+                    <label className="col-sm-4 col-form-label p-0 mt-2 text-end fw-medium">TOTAL AMOUNT *</label>
                     <div className="col-sm-5">
                       <div className="input-group">
                         <span className="input-group-text btn-static" id="basic-addon1">$</span>
@@ -852,6 +852,9 @@ const SubmitClaimPage = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+              <div className='mb-2 text-start'>
+                * Datos obligatorios
               </div>
               {claimInput.status === 1 ? (
                 <div className='d-flex col-md-6 offset-md-5 mb-4'>

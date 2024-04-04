@@ -60,6 +60,7 @@ const ConditionProvider = ({ children }) => {
             else
             {
                 getConditionsByError(errorId);
+                return true;
             }
         }
         catch (error)

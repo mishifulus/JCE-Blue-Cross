@@ -13,10 +13,10 @@ const HomePage = () => {
           </div>
           <div className="card-body d-flex">
             <div className='col-6'>
-              <div className='mt-5'>
+              <div className='mt-4'>
                 <h2 className='fw-light'>Welcome to the Blue Cross JCE system for the control of insurance claims in the United States</h2>
               </div>
-              <div className='mt-5'>
+              <div className='mt-4'>
                 <h4 className='fw-lighter fst-italic'>Working together since 2021 for your health and your wallet</h4>
               </div>
             </div>

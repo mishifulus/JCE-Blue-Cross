@@ -148,37 +148,16 @@ const ErrorProvider = ({ children }) => {
             {
                 getErrors();
 
-                const response = await fetch(`https://localhost:44304/api/PayorErrors/error/${errorId}`, {
+                 await fetch(`https://localhost:44304/api/PayorErrors/error/${errorId}`, {
                 method: 'DELETE'
                 });
 
-                if (response.status === 400)
-                {
-                    return false;
-                }
-                else if(!response.ok)
-                {
-                    return false;
-                }
-                else
-                {
-                    const response = await fetch(`https://localhost:44304/api/Conditions/error/${errorId}`, {
-                    method: 'DELETE'
-                    });
-
-                    if (response.status === 400)
-                    {
-                        return false;
-                    }
-                    else if(!response.ok)
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        return true;
-                    }
-                }
+                
+                await fetch(`https://localhost:44304/api/Conditions/error/${errorId}`, {
+                method: 'DELETE'
+                });
+                
+                return true;
             }
         }
         catch (error)

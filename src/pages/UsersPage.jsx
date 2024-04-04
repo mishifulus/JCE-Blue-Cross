@@ -56,29 +56,64 @@ const UsersPage = () => {
   };
 
   const handleSubmit = async () => {
-    if (usersInput.userId)
+    if (usersInput.name == "" || usersInput.lastName == "" || usersInput.userAddress == "" || usersInput.zipCode == "" || usersInput.state == "" || usersInput.city == "" || usersInput.dob == "" || usersInput.sex == "" || usersInput.email == "" || usersInput.role == "" || usersInput.username == "" || usersInput.expireDate == "")
     {
-      putUser(usersInput.userId, usersInput);
       swal(
-        `User saved`,
-        "Update",
-        "success"
+        `There are empty required fields`,
+        "Register",
+        "warning"
       );
-      await getUsers();
     }
     else
     {
-      usersInput.password = `${usersInput.username}JCE`;
-      postUser(usersInput);
-      swal(
-        `User saved`,
-        "Register",
-        "success"
-      );
+      if (usersInput.userId)
+      {
+        var result = await putUser(usersInput.userId, usersInput);
+        if (result)
+        {
+          swal(
+            `User saved`,
+            "Update",
+            "success"
+          );
+        }
+        else
+        {
+          swal(
+            `ERROR`,
+            "Register",
+            "error"
+          );
+        }
+        
+      }
+      else
+      {
+        usersInput.password = `${usersInput.username}JCE`;
+        var result = await postUser(usersInput);
+        if (result)
+        {
+          swal(
+            `User saved`,
+            "Update",
+            "success"
+          );
+        }
+        else
+        {
+          swal(
+            `ERROR`,
+            "Register",
+            "error"
+          );
+        }
+        
+      }
+
       await getUsers();
+      handleReset();
+      setSeeForm(false);
     }
-    handleReset();
-    setSeeForm(false);
   }
 
   const handleDelete = async (id) => {
@@ -174,51 +209,51 @@ const UsersPage = () => {
             <form>
               <input type="text" id="inputId" name='userId' value={usersInput.userId} onChange={handleChange} className="ms-4 form-control" hidden={true} readOnly disabled/>
               <div className='mb-3 row'>
-                <label className="col-sm-2 col-form-label">Name</label>
+                <label className="col-sm-2 col-form-label">Name *</label>
                 <div className="col-sm-10">
-                  <input type="text" id="inputName" name='name' value={usersInput.name} onChange={handleChange} className="form-control" minLength={1} maxLength={30}/>
+                  <input type="text" id="inputName" name='name' value={usersInput.name} onChange={handleChange} className="form-control" minLength={1} maxLength={30} required/>
                 </div>
               </div>
               <div className='mb-3 row'>
-                <label className="col-sm-2 col-form-label">Last Name</label>
+                <label className="col-sm-2 col-form-label">Last Name *</label>
                 <div className="col-sm-10">
-                  <input type="text" id="inputLastName" name='lastName' value={usersInput.lastName} onChange={handleChange} className="form-control" minLength={1} maxLength={30} />
+                  <input type="text" id="inputLastName" name='lastName' value={usersInput.lastName} onChange={handleChange} className="form-control" minLength={1} maxLength={30} required/>
                 </div>
               </div>
               <div className='mb-3 row'>
-                <label className="col-sm-2 col-form-label">Address</label>
+                <label className="col-sm-2 col-form-label">Address *</label>
                 <div className="col-sm-10">
-                  <input type="text" id="inputAddress" name='userAddress' value={usersInput.userAddress} onChange={handleChange} className="form-control" minLength={1} maxLength={50} />
+                  <input type="text" id="inputAddress" name='userAddress' value={usersInput.userAddress} onChange={handleChange} className="form-control" minLength={1} maxLength={50} required/>
                 </div>
               </div>
               <div className='mb-3 row'>
-                <label className="col-sm-2 col-form-label">Zip Code</label>
+                <label className="col-sm-2 col-form-label">Zip Code *</label>
                 <div className="col-sm-10">
-                  <input type="text" id="inputZipCode" name='zipCode' value={usersInput.zipCode} onChange={handleChange} className="form-control" minLength={1} maxLength={5}/>
+                  <input type="text" id="inputZipCode" name='zipCode' value={usersInput.zipCode} onChange={handleChange} className="form-control" minLength={1} maxLength={5} required/>
                 </div>
               </div>
               <div className='mb-3 row'>
-                <label className="col-sm-2 col-form-label">State</label>
+                <label className="col-sm-2 col-form-label">State *</label>
                 <div className="col-sm-10">
-                  <input type="text" id="inputState" name='state' value={usersInput.state} onChange={handleChange} className="form-control" minLength={1} maxLength={3}/>
+                  <input type="text" id="inputState" name='state' value={usersInput.state} onChange={handleChange} className="form-control" minLength={1} maxLength={3} required/>
                 </div>
               </div>
               <div className='mb-3 row'>
-                <label className="col-sm-2 col-form-label">City</label>
+                <label className="col-sm-2 col-form-label">City *</label>
                 <div className="col-sm-10">
-                  <input type="text" id="inputCity" name='city' value={usersInput.city} onChange={handleChange} className="form-control" minLength={1} maxLength={30}/>
+                  <input type="text" id="inputCity" name='city' value={usersInput.city} onChange={handleChange} className="form-control" minLength={1} maxLength={30} required/>
                 </div>
               </div>
               <div className='mb-3 row'>
-                <label className="col-sm-2 col-form-label">DOB</label>
+                <label className="col-sm-2 col-form-label">DOB *</label>
                 <div className="col-sm-10">
-                  <input type="date" id="inputDob" name='dob' value={usersInput.dob} onChange={handleChange} className="form-control" />
+                  <input type="date" id="inputDob" name='dob' value={usersInput.dob} onChange={handleChange} className="form-control" required/>
                 </div>
               </div>
               <div className='mb-3 row'>
-                <label className="col-sm-2 col-form-label">Sex</label>
+                <label className="col-sm-2 col-form-label">Sex *</label>
                 <div className="col-sm-10">
-                  <select className="form-select" name="sex" value={usersInput.sex} onChange={handleChange}>
+                  <select className="form-select" name="sex" value={usersInput.sex} onChange={handleChange} required>
                     <option value="0">Male</option>
                     <option value="1">Female</option>
                     <option value="2">Other</option>
@@ -226,15 +261,15 @@ const UsersPage = () => {
                 </div>
               </div>
               <div className='mb-3 row'>
-                <label className="col-sm-2 col-form-label">Email</label>
+                <label className="col-sm-2 col-form-label">Email *</label>
                 <div className="col-sm-10">
-                  <input type="email" id="inputEmails" name='email' value={usersInput.email} onChange={handleChange} className="form-control" minLength={1} maxLength={100}/>
+                  <input type="email" id="inputEmails" name='email' value={usersInput.email} onChange={handleChange} className="form-control" minLength={1} maxLength={100} required/>
                 </div>
               </div>
               <div className='mb-3 row'>
-                <label className="col-sm-2 col-form-label">Role</label>
+                <label className="col-sm-2 col-form-label">Role *</label>
                 <div className="col-sm-10">
-                  <select className="form-select" name='role' value={usersInput.role} onChange={handleChange}>
+                  <select className="form-select" name='role' value={usersInput.role} onChange={handleChange} required>
                     <option value="0">Administrator</option>
                     <option value="1">Member</option>
                     <option value="2">Provider</option>
@@ -243,19 +278,19 @@ const UsersPage = () => {
                 </div>
               </div>
               <div className='mb-3 row'>
-                <label className="col-sm-2 col-form-label">Username</label>
+                <label className="col-sm-2 col-form-label">Username *</label>
                 <div className="col-sm-10">
-                  <input type="text" id="inputUsername" name='username' value={usersInput.username} onChange={handleChange} className="form-control" minLength={1} maxLength={30}/>
+                  <input type="text" id="inputUsername" name='username' value={usersInput.username} onChange={handleChange} className="form-control" minLength={1} maxLength={30} required/>
                 </div>
               </div>
               <div className='mb-3 row'>
-                <label className="col-sm-2 col-form-label">Expired Date</label>
+                <label className="col-sm-2 col-form-label">Expired Date *</label>
                 <div className="col-sm-10">
-                  <input type="date" id="inputExpired" name='expireDate' value={usersInput.expireDate} onChange={handleChange} className="form-control" />
+                  <input type="date" id="inputExpired" name='expireDate' value={usersInput.expireDate} onChange={handleChange} className="form-control" required/>
                 </div>
               </div>
               <div className='mb-3 row'>
-                <label className="col-sm-2 col-form-label">Status</label>
+                <label className="col-sm-2 col-form-label">Status *</label>
                 <div className="col-sm-10">
                 {usersInput.status == 0 ? (
                   <select className="form-select" name="status" value={usersInput.status} onChange={handleChange}>
@@ -273,6 +308,9 @@ const UsersPage = () => {
               </div>
 
             </form>
+          </div>
+          <div className='mb-2 text-start ms-5'>
+            * Datos obligatorios
           </div>
         </div>
         <div className='d-flex col-md-6 offset-md-6 mb-4'>

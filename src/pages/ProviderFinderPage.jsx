@@ -46,28 +46,60 @@ const ProviderFinderPage = () => {
   };
 
   const handleSubmit = async () => {
-    if (providersInput.providerId)
+    if (providersInput.providerName == "" || providersInput.type == "" || providersInput.providerAddress == "" || providersInput.zipCode == "" || providersInput.state == "" || providersInput.city == "")
     {
-      putProvider(providersInput.providerId, providersInput);
       swal(
-        `Provider saved`,
-        "Update",
-        "success"
+        `There are empty required fields`,
+        "Register",
+        "warning"
       );
-      await getProviders();
     }
     else
     {
-      postProvider(providersInput);
-      swal(
-        `Provider saved`,
-        "Register",
-        "success"
-      );
+      if (providersInput.providerId)
+      {
+        var result = await putProvider(providersInput.providerId, providersInput);
+        if (result)
+        {
+          swal(
+            `Provider saved`,
+            "Update",
+            "success"
+          );
+        }
+        else
+        {
+          swal(
+            `ERROR`,
+            "Register",
+            "error"
+          );
+        }
+      }
+      else
+      {
+        var result = await postProvider(providersInput);
+        if (result)
+        {
+          swal(
+            `Provider saved`,
+            "Update",
+            "success"
+          );
+        }
+        else
+        {
+          swal(
+            `ERROR`,
+            "Register",
+            "error"
+          );
+        }
+      }
       await getProviders();
+      handleReset();
+      setSeeForm(false);
     }
-    handleReset();
-    setSeeForm(false);
   };
 
   const handleDelete = async (id) => {
@@ -157,46 +189,46 @@ const ProviderFinderPage = () => {
               <form>
                 <input type="text" id="inputId" name='providerId' value={providersInput.providerId} onChange={handleChange} className="ms-4 form-control" hidden={true} readOnly disabled/>
                 <div className='mb-3 row'>
-                  <label className="col-sm-2 col-form-label">Name</label>
+                  <label className="col-sm-2 col-form-label">Name *</label>
                   <div className="col-sm-10">
-                    <input type="text" id="inputName" name='providerName' value={providersInput.providerName} onChange={handleChange} className="form-control" minLength={1} maxLength={30}/>
+                    <input type="text" id="inputName" name='providerName' value={providersInput.providerName} onChange={handleChange} className="form-control" minLength={1} maxLength={30} required/>
                   </div>
                 </div>
                 <div className='mb-3 row'>
-                  <label className="col-sm-2 col-form-label">Type</label>
+                  <label className="col-sm-2 col-form-label">Type *</label>
                   <div className="col-sm-10">
-                    <select className="form-select" name="type" value={providersInput.type} onChange={handleChange}>
+                    <select className="form-select" name="type" value={providersInput.type} onChange={handleChange} required>
                       <option value="0">Institutional</option>
                       <option value="1">Professional</option>
                     </select>
                   </div>
                 </div>
                 <div className='mb-3 row'>
-                  <label className="col-sm-2 col-form-label">Address</label>
+                  <label className="col-sm-2 col-form-label">Address *</label>
                   <div className="col-sm-10">
-                    <input type="text" id="inputAddress" name='providerAddress' value={providersInput.providerAddress} onChange={handleChange} className="form-control" minLength={1} maxLength={50} />
+                    <input type="text" id="inputAddress" name='providerAddress' value={providersInput.providerAddress} onChange={handleChange} className="form-control" minLength={1} maxLength={50} required/>
                   </div>
                 </div>
                 <div className='mb-3 row'>
-                  <label className="col-sm-2 col-form-label">Zip Code</label>
+                  <label className="col-sm-2 col-form-label">Zip Code *</label>
                   <div className="col-sm-10">
-                    <input type="text" id="inputZipCode" name='zipCode' value={providersInput.zipCode} onChange={handleChange} className="form-control" minLength={1} maxLength={5}/>
+                    <input type="text" id="inputZipCode" name='zipCode' value={providersInput.zipCode} onChange={handleChange} className="form-control" minLength={1} maxLength={5} required/>
                   </div>
                 </div>
                 <div className='mb-3 row'>
-                  <label className="col-sm-2 col-form-label">State</label>
+                  <label className="col-sm-2 col-form-label">State *</label>
                   <div className="col-sm-10">
-                    <input type="text" id="inputState" name='state' value={providersInput.state} onChange={handleChange} className="form-control" minLength={1} maxLength={3}/>
+                    <input type="text" id="inputState" name='state' value={providersInput.state} onChange={handleChange} className="form-control" minLength={1} maxLength={3} required/>
                   </div>
                 </div>
                 <div className='mb-3 row'>
-                  <label className="col-sm-2 col-form-label">City</label>
+                  <label className="col-sm-2 col-form-label">City *</label>
                   <div className="col-sm-10">
-                    <input type="text" id="inputCity" name='city' value={providersInput.city} onChange={handleChange} className="form-control" minLength={1} maxLength={30}/>
+                    <input type="text" id="inputCity" name='city' value={providersInput.city} onChange={handleChange} className="form-control" minLength={1} maxLength={30} required/>
                   </div>
                 </div>
                 <div className='mb-3 row'>
-                  <label className="col-sm-2 col-form-label">Status</label>
+                  <label className="col-sm-2 col-form-label">Status *</label>
                   <div className="col-sm-10">
                   {providersInput.status == 0 ? (
                     <select className="form-select" name="status" value={providersInput.status} onChange={handleChange}>
@@ -212,6 +244,9 @@ const ProviderFinderPage = () => {
                   </div>
                 </div>
               </form>
+            </div>
+            <div className='mb-2 text-start ms-5'>
+              * Datos obligatorios
             </div>
           </div>
           <div className='d-flex col-md-6 offset-md-6 mb-4'>
