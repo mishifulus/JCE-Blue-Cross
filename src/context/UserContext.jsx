@@ -89,7 +89,12 @@ const UserProvider = ({ children }) => {
             const response = await fetch (`https://localhost:44304/block/${username}`, {
                 method: 'PUT'
             });
-            if (!response.ok)
+
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }
@@ -143,7 +148,7 @@ const UserProvider = ({ children }) => {
             }
             else
             {
-                console.error('Error al obtener los usuarios',);
+                console.error('Error al obtener los usuarios activos',);
             }
         }
         catch (error)
@@ -187,7 +192,12 @@ const UserProvider = ({ children }) => {
                 },
                 body: JSON.stringify(userData)
             });
-            if (!response.ok)
+
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }
@@ -216,7 +226,12 @@ const UserProvider = ({ children }) => {
                 },
                 body: JSON.stringify(userData)
             });
-            if (!response.ok)
+
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }
@@ -241,7 +256,12 @@ const UserProvider = ({ children }) => {
         try
         {
             const response = await fetch(`https://localhost:44304/api/User/${userId}`, {method: 'DELETE'});
-            if (!response.ok)
+
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }

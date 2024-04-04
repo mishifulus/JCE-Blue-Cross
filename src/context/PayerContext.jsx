@@ -51,7 +51,7 @@ const PayerProvider = ({ children }) => {
             }
             else
             {
-                console.error('Error al obtener los payers');
+                console.error('Error al obtener los payers activos');
             }
         }
         catch (error)
@@ -94,7 +94,12 @@ const PayerProvider = ({ children }) => {
                 },
                 body: JSON.stringify(payorData)
             });
-            if (!response.ok)
+            
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }
@@ -122,7 +127,12 @@ const PayerProvider = ({ children }) => {
                 },
                 body: JSON.stringify(payorData)
             });
-            if (!response.ok)
+            
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }
@@ -148,7 +158,12 @@ const PayerProvider = ({ children }) => {
             const response = await fetch(`https://localhost:44304/api/Payor/${payorId}`, {
                 method: 'DELETE'
             });
-            if (!response.ok)
+            
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }

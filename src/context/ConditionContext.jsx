@@ -49,7 +49,11 @@ const ConditionProvider = ({ children }) => {
                 body: JSON.stringify(conditionData)
             });
 
-            if (!response.ok)
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }
@@ -77,7 +81,11 @@ const ConditionProvider = ({ children }) => {
                 body: JSON.stringify(conditionData)
             });
 
-            if (!response.ok)
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }
@@ -104,7 +112,11 @@ const ConditionProvider = ({ children }) => {
                 method: 'DELETE'
             });
 
-            if (!response.ok)
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }

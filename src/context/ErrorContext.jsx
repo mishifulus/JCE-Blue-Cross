@@ -71,7 +71,12 @@ const ErrorProvider = ({ children }) => {
                 },
                 body: JSON.stringify(errorData)
             });
-            if (!response.ok)
+
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }
@@ -99,7 +104,12 @@ const ErrorProvider = ({ children }) => {
                 },
                 body: JSON.stringify(errorData)
             });
-            if (!response.ok)
+            
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }
@@ -125,7 +135,12 @@ const ErrorProvider = ({ children }) => {
             const response = await fetch(`https://localhost:44304/api/Error/${errorId}`, {
                 method: 'DELETE'
             });
-            if (!response.ok)
+            
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }
@@ -137,7 +152,11 @@ const ErrorProvider = ({ children }) => {
                 method: 'DELETE'
                 });
 
-                if(!response.ok)
+                if (response.status === 400)
+                {
+                    return false;
+                }
+                else if(!response.ok)
                 {
                     return false;
                 }
@@ -147,7 +166,11 @@ const ErrorProvider = ({ children }) => {
                     method: 'DELETE'
                     });
 
-                    if(!response.ok)
+                    if (response.status === 400)
+                    {
+                        return false;
+                    }
+                    else if(!response.ok)
                     {
                         return false;
                     }

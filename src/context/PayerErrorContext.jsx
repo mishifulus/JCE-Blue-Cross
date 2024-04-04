@@ -50,7 +50,11 @@ const PayerErrorProvider = ({ children }) =>
                 body: ''
             });
 
-            if (!response.ok)
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }
@@ -77,7 +81,11 @@ const PayerErrorProvider = ({ children }) =>
                 method: 'DELETE'
             });
 
-            if (!response.ok)
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }

@@ -51,7 +51,7 @@ const ProviderProvider = ({ children }) => {
             }
             else
             {
-                console.error('Error al obtener los providers');
+                console.error('Error al obtener los providers activos');
             }
         }
         catch (error)
@@ -94,7 +94,12 @@ const ProviderProvider = ({ children }) => {
                 },
                 body: JSON.stringify(providerData)
             });
-            if (!response.ok)
+
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }
@@ -122,7 +127,12 @@ const ProviderProvider = ({ children }) => {
                 },
                 body: JSON.stringify(providerData)
             });
-            if (!response.ok)
+
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }
@@ -148,7 +158,12 @@ const ProviderProvider = ({ children }) => {
             const response = await fetch(`https://localhost:44304/api/Provider/${providerId}`, {
                 method: 'DELETE'
             });
-            if (!response.ok)
+
+            if (response.status === 400)
+            {
+                return false;
+            }
+            else if (!response.ok)
             {
                 return false;
             }
